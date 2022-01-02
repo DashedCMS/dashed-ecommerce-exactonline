@@ -7,7 +7,6 @@ use Illuminate\Console\Scheduling\Schedule;
 use Qubiqx\QcommerceEcommerceCore\Models\Order;
 use Qubiqx\QcommerceEcommerceExactonline\Filament\Pages\Settings\ExactonlineSettingsPage;
 use Spatie\LaravelPackageTools\Package;
-use Spatie\LaravelPackageTools\PackageServiceProvider;
 
 class QcommerceEcommerceExactonlineServiceProvider extends PluginServiceProvider
 {
