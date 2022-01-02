@@ -2,14 +2,10 @@
 
 namespace Qubiqx\QcommerceEcommerceExactonline;
 
-<<<<<<< HEAD
 use Filament\PluginServiceProvider;
 use Illuminate\Console\Scheduling\Schedule;
 use Qubiqx\QcommerceEcommerceCore\Models\Order;
 use Qubiqx\QcommerceEcommerceExactonline\Filament\Pages\Settings\ExactonlineSettingsPage;
-=======
-use Qubiqx\QcommerceEcommerceExactonline\Commands\QcommerceEcommerceExactonlineCommand;
->>>>>>> 803c877f8216589c70041ae82e1a5ba50aaa161a
 use Spatie\LaravelPackageTools\Package;
 use Spatie\LaravelPackageTools\PackageServiceProvider;
 
