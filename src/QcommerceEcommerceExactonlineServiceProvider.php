@@ -2,9 +2,9 @@
 
 namespace Qubiqx\QcommerceEcommerceExactonline;
 
+use Qubiqx\QcommerceEcommerceExactonline\Commands\QcommerceEcommerceExactonlineCommand;
 use Spatie\LaravelPackageTools\Package;
 use Spatie\LaravelPackageTools\PackageServiceProvider;
-use Qubiqx\QcommerceEcommerceExactonline\Commands\QcommerceEcommerceExactonlineCommand;
 
 class QcommerceEcommerceExactonlineServiceProvider extends PackageServiceProvider
 {
