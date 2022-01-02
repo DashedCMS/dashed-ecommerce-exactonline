@@ -11,6 +11,7 @@ use Qubiqx\QcommerceEcommerceExactonline\Commands\PushOrdersToExactonlineCommand
 use Qubiqx\QcommerceEcommerceExactonline\Commands\PushProductsToExactonlineCommand;
 use Qubiqx\QcommerceEcommerceExactonline\Commands\RefreshExactonlineTokenCommand;
 use Qubiqx\QcommerceEcommerceExactonline\Filament\Pages\Settings\ExactonlineSettingsPage;
+use Qubiqx\QcommerceEcommerceExactonline\Filament\Widgets\ExactonlineOrderStats;
 use Qubiqx\QcommerceEcommerceExactonline\Livewire\Orders\ShowExactonlineOrder;
 use Qubiqx\QcommerceEcommerceExactonline\Models\ExactonlineOrder;
 use Qubiqx\QcommerceEcommerceExactonline\Models\ExactonlineProduct;
@@ -88,7 +89,7 @@ class QcommerceEcommerceExactonlineServiceProvider extends PluginServiceProvider
     protected function getWidgets(): array
     {
         return array_merge(parent::getWidgets(), [
-//            EboekhoudenOrderStats::class,
+            ExactonlineOrderStats::class,
         ]);
     }
 }
