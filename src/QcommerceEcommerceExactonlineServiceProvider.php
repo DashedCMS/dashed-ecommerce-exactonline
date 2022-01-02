@@ -4,10 +4,17 @@ namespace Qubiqx\QcommerceEcommerceExactonline;
 
 use Filament\PluginServiceProvider;
 use Illuminate\Console\Scheduling\Schedule;
+use Livewire\Livewire;
 use Qubiqx\QcommerceEcommerceCore\Models\Order;
+use Qubiqx\QcommerceEcommerceCore\Models\Product;
+use Qubiqx\QcommerceEcommerceExactonline\Livewire\Orders\ShowExactonlineOrder;
+use Qubiqx\QcommerceEcommerceExactonline\Commands\PushOrdersToExactonlineCommand;
+use Qubiqx\QcommerceEcommerceExactonline\Commands\PushProductsToExactonlineCommand;
+use Qubiqx\QcommerceEcommerceExactonline\Commands\RefreshExactonlineTokenCommand;
 use Qubiqx\QcommerceEcommerceExactonline\Filament\Pages\Settings\ExactonlineSettingsPage;
+use Qubiqx\QcommerceEcommerceExactonline\Models\ExactonlineOrder;
+use Qubiqx\QcommerceEcommerceExactonline\Models\ExactonlineProduct;
 use Spatie\LaravelPackageTools\Package;
-use Spatie\LaravelPackageTools\PackageServiceProvider;
 
 class QcommerceEcommerceExactonlineServiceProvider extends PluginServiceProvider
 {
@@ -17,13 +24,21 @@ class QcommerceEcommerceExactonlineServiceProvider extends PluginServiceProvider
     {
         $this->app->booted(function () {
             $schedule = app(Schedule::class);
-//            $schedule->command(PushOrdersToEboekhoudenCommand::class)->everyFifteenMinutes();
+            $schedule->command(RefreshExactonlineTokenCommand::class)->everyMinute();
+            $schedule->command(PushProductsToExactonlineCommand::class)->everyFifteenMinutes();
+            //Only for vat rate atm, but not used
+//                    $schedule->command(SyncProductsWithExactonlineCommand::class)->everyFifteenMinutes();
+            $schedule->command(PushOrdersToExactonlineCommand::class)->everyMinute();
         });
 
-//        Livewire::component('show-exactonline-order', ShowEboekhoudenShopOrder::class);
+        Livewire::component('show-exactonline-order', ShowExactonlineOrder::class);
 
         Order::addDynamicRelation('exactonlineOrder', function (Order $model) {
-//            return $model->hasOne(EboekhoudenOrder::class);
+            return $model->hasOne(ExactonlineOrder::class);
+        });
+
+        Product::addDynamicRelation('exactonlineProduct', function (Product $model) {
+            return $model->hasOne(ExactonlineProduct::class);
         });
     }
 
@@ -55,6 +70,9 @@ class QcommerceEcommerceExactonlineServiceProvider extends PluginServiceProvider
         $package
             ->name('qcommerce-ecommerce-exactonline')
             ->hasViews()
+            ->hasRoutes([
+                'exactonlineRoutes'
+            ])
             ->hasCommands([
 //                PushOrdersToEboekhoudenCommand::class,
             ]);

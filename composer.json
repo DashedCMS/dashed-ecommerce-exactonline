@@ -50,7 +50,8 @@
     "extra": {
         "laravel": {
             "providers": [
-                "Qubiqx\\QcommerceEcommerceExactonline\\QcommerceEcommerceExactonlineServiceProvider"
+                "Qubiqx\\QcommerceEcommerceExactonline\\QcommerceEcommerceExactonlineServiceProvider",
+                "Qubiqx\\QcommerceEcommerceExactonline\\QcommerceEcommerceExactonlineEventServiceProvider"
             ],
             "aliases": {
                 "QcommerceEcommerceExactonline": "Qubiqx\\QcommerceEcommerceExactonline\\Facades\\QcommerceEcommerceExactonline"

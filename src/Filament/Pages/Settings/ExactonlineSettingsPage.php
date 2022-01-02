@@ -3,6 +3,7 @@
 namespace Qubiqx\QcommerceEcommerceExactonline\Filament\Pages\Settings;
 
 use Filament\Forms\Components\Placeholder;
+use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Tabs;
 use Filament\Forms\Components\Tabs\Tab;
 use Filament\Forms\Components\TextInput;
@@ -12,13 +13,14 @@ use Filament\Pages\Page;
 use Qubiqx\QcommerceCore\Classes\Sites;
 use Qubiqx\QcommerceCore\Models\Customsetting;
 use Qubiqx\QcommerceEcommerceEboekhouden\Classes\Eboekhouden;
+use Qubiqx\QcommerceEcommerceExactonline\Classes\Exactonline;
 
 class ExactonlineSettingsPage extends Page implements HasForms
 {
     use InteractsWithForms;
 
     protected static bool $shouldRegisterNavigation = false;
-    protected static ?string $title = 'E-boekhouden';
+    protected static ?string $title = 'Exactonline';
 
     protected static string $view = 'qcommerce-core::settings.pages.default-settings';
 
@@ -27,12 +29,15 @@ class ExactonlineSettingsPage extends Page implements HasForms
         $formData = [];
         $sites = Sites::getSites();
         foreach ($sites as $site) {
-            $formData["eboekhouden_username_{$site['id']}"] = Customsetting::get('eboekhouden_username', $site['id']);
-            $formData["eboekhouden_security_code_1_{$site['id']}"] = Customsetting::get('eboekhouden_security_code_1', $site['id']);
-            $formData["eboekhouden_security_code_2_{$site['id']}"] = Customsetting::get('eboekhouden_security_code_2', $site['id']);
-            $formData["eboekhouden_grootboek_rekening_{$site['id']}"] = Customsetting::get('eboekhouden_grootboek_rekening', $site['id']);
-            $formData["eboekhouden_debiteuren_rekening_{$site['id']}"] = Customsetting::get('eboekhouden_debiteuren_rekening', $site['id']);
-            $formData["eboekhouden_connected_{$site['id']}"] = Customsetting::get('eboekhouden_connected', $site['id'], 0) ? true : false;
+            $formData["exactonline_customer_id_{$site['id']}"] = Customsetting::get('exactonline_customer_id', $site['id']);
+            $formData["exactonline_client_id_{$site['id']}"] = Customsetting::get('exactonline_client_id', $site['id']);
+            $formData["exactonline_client_secret_{$site['id']}"] = Customsetting::get('exactonline_client_secret', $site['id']);
+            $formData["exactonline_division_{$site['id']}"] = Customsetting::get('exactonline_division', $site['id']);
+            $formData["exactonline_vat_codes_gl_to_pay_{$site['id']}"] = Customsetting::get('exactonline_vat_codes_gl_to_pay', $site['id']);
+            $formData["exactonline_vat_codes_gl_to_claim_{$site['id']}"] = Customsetting::get('exactonline_vat_codes_gl_to_claim', $site['id']);
+            $formData["exactonline_payment_costs_product_id_{$site['id']}"] = Customsetting::get('exactonline_payment_costs_product_id', $site['id']);
+            $formData["exactonline_shipping_costs_product_id_{$site['id']}"] = Customsetting::get('exactonline_shipping_costs_product_id', $site['id']);
+            $formData["exactonline_connected_{$site['id']}"] = Customsetting::get('exactonline_connected', $site['id'], 0) ? true : false;
         }
 
         $this->form->fill($formData);
@@ -45,46 +50,65 @@ class ExactonlineSettingsPage extends Page implements HasForms
 
         $tabs = [];
         foreach ($sites as $site) {
+//        dd(Exactonline::getGLAccounts($site['id']));
             $schema = [
                 Placeholder::make('label')
-                    ->label("E-boekhouden voor {$site['name']}")
-                    ->content('Activeer E-boekhouden.')
+                    ->label("Exactonline voor {$site['name']}")
+                    ->content('Activeer Exactonline.')
                     ->columnSpan([
                         'default' => 1,
                         'lg' => 2,
                     ]),
                 Placeholder::make('label')
-                    ->label("E-boekhouden is " . (! Customsetting::get('eboekhouden_connected', $site['id'], 0) ? 'niet' : '') . ' geconnect')
-                    ->content(Customsetting::get('eboekhouden_connection_error', $site['id'], ''))
+                    ->label("Exactonline is " . (!Customsetting::get('exactonline_connected', $site['id'], 0) ? 'niet' : '') . ' geconnect')
+                    ->content(Customsetting::get('exactonline_connection_error', $site['id'], ''))
                     ->columnSpan([
                         'default' => 1,
                         'lg' => 2,
                     ]),
-                TextInput::make("eboekhouden_username_{$site['id']}")
-                    ->label('E-boekhouden username')
+                TextInput::make("exactonline_customer_id_{$site['id']}")
+                    ->label('Exactonline client ID')
                     ->rules([
                         'max:255',
                     ]),
-                TextInput::make("eboekhouden_security_code_1_{$site['id']}")
-                    ->label('E-boekhouden security code 1')
+                TextInput::make("exactonline_client_id_{$site['id']}")
+                    ->label('Exactonline client secret')
                     ->rules([
                         'max:255',
                     ]),
-                TextInput::make("eboekhouden_security_code_2_{$site['id']}")
-                    ->label('E-boekhouden security code 2')
+                TextInput::make("exactonline_client_secret_{$site['id']}")
+                    ->label('Exactonline division')
                     ->rules([
                         'max:255',
                     ]),
-                TextInput::make("eboekhouden_grootboek_rekening_{$site['id']}")
-                    ->label('E-boekhouden grootboekrekening')
-                    ->rules([
-                        'max:255',
-                    ]),
-                TextInput::make("eboekhouden_debiteuren_rekening_{$site['id']}")
-                    ->label('E-boekhouden debiteurenrekening')
-                    ->rules([
-                        'max:255',
-                    ]),
+                Select::make("exactonline_division_{$site['id']}")
+                    ->label('Exactonline VAT rate GL rekening ID (to pay)')
+                    ->required()
+                    ->options(Exactonline::getGLAccounts($site['id']))
+                    ->visible(Customsetting::get('exactonline_connected', $site['id'], 0) ? true : false),
+                Select::make("exactonline_vat_codes_gl_to_pay_{$site['id']}")
+                    ->label('Exactonline VAT rate GL rekening ID (to claim)')
+                    ->required()
+                    ->options(Exactonline::getGLAccounts($site['id']))
+                    ->visible(Customsetting::get('exactonline_connected', $site['id'], 0) ? true : false),
+                Select::make("exactonline_vat_codes_gl_to_claim_{$site['id']}")
+                    ->label('Exactonline product om betalingskosten op te boeken')
+                    ->required()
+                    ->options(Exactonline::getItems($site['id']))
+                    ->visible(Customsetting::get('exactonline_connected', $site['id'], 0) ? true : false),
+                Select::make("exactonline_payment_costs_product_id_{$site['id']}")
+                    ->label('Exactonline product om verzendkosten op te boeken')
+                    ->required()
+                    ->options(Exactonline::getItems($site['id']))
+                    ->visible(Customsetting::get('exactonline_connected', $site['id'], 0) ? true : false),
+                Select::make("exactonline_shipping_costs_product_id_{$site['id']}")
+                    ->label('Exactonline customer ID (alle bestellingen worden op deze klant geboekt)')
+                    ->required()
+                    ->options(Exactonline::getCustomers($site['id']))
+                    ->visible(Customsetting::get('exactonline_connected', $site['id'], 0) ? true : false),
+                Placeholder::make("")
+                    ->label('Maak de connectie af, bezoek: ' . route('qcommerce.exactonline.authenticate', [$site['id']]))
+                    ->hidden(Customsetting::get('exactonline_connected', $site['id'], 0) ? true : false),
             ];
 
             $tabs[] = Tab::make($site['id'])
@@ -106,16 +130,22 @@ class ExactonlineSettingsPage extends Page implements HasForms
         $sites = Sites::getSites();
 
         foreach ($sites as $site) {
-            Customsetting::set('eboekhouden_username', $this->form->getState()["eboekhouden_username_{$site['id']}"], $site['id']);
-            Customsetting::set('eboekhouden_security_code_1', $this->form->getState()["eboekhouden_security_code_1_{$site['id']}"], $site['id']);
-            Customsetting::set('eboekhouden_security_code_2', $this->form->getState()["eboekhouden_security_code_2_{$site['id']}"], $site['id']);
-            Customsetting::set('eboekhouden_grootboek_rekening', $this->form->getState()["eboekhouden_grootboek_rekening_{$site['id']}"], $site['id']);
-            Customsetting::set('eboekhouden_debiteuren_rekening', $this->form->getState()["eboekhouden_debiteuren_rekening_{$site['id']}"], $site['id']);
-            Customsetting::set('eboekhouden_connected', Eboekhouden::isConnected($site['id']), $site['id']);
+            Customsetting::set('exactonline_customer_id', $this->form->getState()["exactonline_customer_id_{$site['id']}"], $site['id']);
+            Customsetting::set('exactonline_client_id', $this->form->getState()["exactonline_client_id_{$site['id']}"], $site['id']);
+            Customsetting::set('exactonline_client_secret', $this->form->getState()["exactonline_client_secret_{$site['id']}"], $site['id']);
+            Customsetting::set('eboekhouden_connected', Exactonline::isConnected($site['id']), $site['id']);
+
+            if(Customsetting::get('exactonline_connected', $site['id'], 0) ? true : false){
+                Customsetting::set('exactonline_division', $this->form->getState()["exactonline_division_{$site['id']}"], $site['id']);
+                Customsetting::set('exactonline_vat_codes_gl_to_pay', $this->form->getState()["exactonline_vat_codes_gl_to_pay_{$site['id']}"], $site['id']);
+                Customsetting::set('exactonline_vat_codes_gl_to_claim', $this->form->getState()["exactonline_vat_codes_gl_to_claim_{$site['id']}"], $site['id']);
+                Customsetting::set('exactonline_payment_costs_product_id', $this->form->getState()["exactonline_payment_costs_product_id_{$site['id']}"], $site['id']);
+                Customsetting::set('exactonline_shipping_costs_product_id', $this->form->getState()["exactonline_shipping_costs_product_id_{$site['id']}"], $site['id']);
+            }
         }
 
-        $this->notify('success', 'De E-boekhouden instellingen zijn opgeslagen');
+        $this->notify('success', 'De Exactonline instellingen zijn opgeslagen');
 
-        return redirect(EboekhoudenSettingsPage::getUrl());
+        return redirect(ExactonlineSettingsPage::getUrl());
     }
 }
