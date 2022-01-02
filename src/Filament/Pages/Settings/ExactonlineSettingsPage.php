@@ -12,7 +12,6 @@ use Filament\Forms\Contracts\HasForms;
 use Filament\Pages\Page;
 use Qubiqx\QcommerceCore\Classes\Sites;
 use Qubiqx\QcommerceCore\Models\Customsetting;
-use Qubiqx\QcommerceEcommerceEboekhouden\Classes\Eboekhouden;
 use Qubiqx\QcommerceEcommerceExactonline\Classes\Exactonline;
 
 class ExactonlineSettingsPage extends Page implements HasForms
@@ -60,7 +59,7 @@ class ExactonlineSettingsPage extends Page implements HasForms
                         'lg' => 2,
                     ]),
                 Placeholder::make('label')
-                    ->label("Exactonline is " . (!Customsetting::get('exactonline_connected', $site['id'], 0) ? 'niet' : '') . ' geconnect')
+                    ->label("Exactonline is " . (! Customsetting::get('exactonline_connected', $site['id'], 0) ? 'niet' : '') . ' geconnect')
                     ->content(Customsetting::get('exactonline_connection_error', $site['id'], ''))
                     ->columnSpan([
                         'default' => 1,
@@ -135,7 +134,7 @@ class ExactonlineSettingsPage extends Page implements HasForms
             Customsetting::set('exactonline_client_secret', $this->form->getState()["exactonline_client_secret_{$site['id']}"], $site['id']);
             Customsetting::set('eboekhouden_connected', Exactonline::isConnected($site['id']), $site['id']);
 
-            if(Customsetting::get('exactonline_connected', $site['id'], 0) ? true : false){
+            if (Customsetting::get('exactonline_connected', $site['id'], 0) ? true : false) {
                 Customsetting::set('exactonline_division', $this->form->getState()["exactonline_division_{$site['id']}"], $site['id']);
                 Customsetting::set('exactonline_vat_codes_gl_to_pay', $this->form->getState()["exactonline_vat_codes_gl_to_pay_{$site['id']}"], $site['id']);
                 Customsetting::set('exactonline_vat_codes_gl_to_claim', $this->form->getState()["exactonline_vat_codes_gl_to_claim_{$site['id']}"], $site['id']);

@@ -7,11 +7,11 @@ use Illuminate\Console\Scheduling\Schedule;
 use Livewire\Livewire;
 use Qubiqx\QcommerceEcommerceCore\Models\Order;
 use Qubiqx\QcommerceEcommerceCore\Models\Product;
-use Qubiqx\QcommerceEcommerceExactonline\Livewire\Orders\ShowExactonlineOrder;
 use Qubiqx\QcommerceEcommerceExactonline\Commands\PushOrdersToExactonlineCommand;
 use Qubiqx\QcommerceEcommerceExactonline\Commands\PushProductsToExactonlineCommand;
 use Qubiqx\QcommerceEcommerceExactonline\Commands\RefreshExactonlineTokenCommand;
 use Qubiqx\QcommerceEcommerceExactonline\Filament\Pages\Settings\ExactonlineSettingsPage;
+use Qubiqx\QcommerceEcommerceExactonline\Livewire\Orders\ShowExactonlineOrder;
 use Qubiqx\QcommerceEcommerceExactonline\Models\ExactonlineOrder;
 use Qubiqx\QcommerceEcommerceExactonline\Models\ExactonlineProduct;
 use Spatie\LaravelPackageTools\Package;
@@ -71,7 +71,7 @@ class QcommerceEcommerceExactonlineServiceProvider extends PluginServiceProvider
             ->name('qcommerce-ecommerce-exactonline')
             ->hasViews()
             ->hasRoutes([
-                'exactonlineRoutes'
+                'exactonlineRoutes',
             ])
             ->hasCommands([
 //                PushOrdersToEboekhoudenCommand::class,

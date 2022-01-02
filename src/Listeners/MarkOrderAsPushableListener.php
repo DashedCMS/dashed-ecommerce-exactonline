@@ -25,7 +25,7 @@ class MarkOrderAsPushableListener
      */
     public function handle(InvoiceCreatedEvent $event)
     {
-        if (Exactonline::isConnected($event->order->site_id) && !$event->order->exactonlineOrder) {
+        if (Exactonline::isConnected($event->order->site_id) && ! $event->order->exactonlineOrder) {
             $event->order->exactonlineOrder()->create([]);
         }
     }

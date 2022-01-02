@@ -18,7 +18,7 @@ class ExactonlineProduct extends Model
         'product_id',
         'exactonline_id',
         'error',
-        'vat_code_id'
+        'vat_code_id',
     ];
 
     protected $dates = [

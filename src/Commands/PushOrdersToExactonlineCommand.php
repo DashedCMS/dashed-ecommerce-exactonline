@@ -40,7 +40,7 @@ class PushOrdersToExactonlineCommand extends Command
     public function handle()
     {
         if (Exactonline::connected()) {
-            foreach(ExactonlineOrder::where('pushed', '!=', 1)->limit(5)->with(['order'])->get() as $exactonlineOrder){
+            foreach (ExactonlineOrder::where('pushed', '!=', 1)->limit(5)->with(['order'])->get() as $exactonlineOrder) {
                 $this->info('order ' . $exactonlineOrder->order->id);
                 Exactonline::pushOrder($exactonlineOrder->order);
             }
