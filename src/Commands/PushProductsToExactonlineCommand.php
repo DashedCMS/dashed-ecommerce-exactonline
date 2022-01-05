@@ -39,7 +39,7 @@ class PushProductsToExactonlineCommand extends Command
      */
     public function handle()
     {
-        if (Exactonline::connected()) {
+        if (Exactonline::isConnected()) {
             foreach (Product::publicShowable()->get() as $product) {
                 Exactonline::pushProduct($product);
             }
