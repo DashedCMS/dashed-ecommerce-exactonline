@@ -59,11 +59,12 @@ class QcommerceEcommerceExactonlineServiceProvider extends PluginServiceProvider
             ])
         );
 
-        ecommerce()->builder(
-            'orderSideWidgets',
-            array_merge(ecommerce()->builder('orderSideWidgets'), [
+        ecommerce()->widgets(
+            'orders',
+            array_merge(ecommerce()->widgets('orders'), [
                 'show-exactonline-order' => [
                     'name' => 'show-exactonline-order',
+                    'width' => 'sidebar'
                 ],
             ])
         );
