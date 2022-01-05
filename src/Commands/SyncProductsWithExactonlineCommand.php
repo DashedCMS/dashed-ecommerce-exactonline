@@ -1,6 +1,6 @@
 <?php
 
-namespace Qubiqx\Qcommerce\Console\Commands\Exactonline;
+namespace Qubiqx\QcommerceEcommerceExactonline\Commands;
 
 use Illuminate\Console\Command;
 use Qubiqx\QcommerceEcommerceCore\Models\Product;
@@ -39,7 +39,7 @@ class SyncProductsWithExactonlineCommand extends Command
      */
     public function handle()
     {
-        if (Exactonline::connected()) {
+        if (Exactonline::isConnected()) {
             foreach (Product::publicShowable()->get() as $product) {
                 Exactonline::syncProduct($product);
             }
