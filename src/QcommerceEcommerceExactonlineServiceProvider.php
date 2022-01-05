@@ -5,6 +5,7 @@ namespace Qubiqx\QcommerceEcommerceExactonline;
 use Filament\PluginServiceProvider;
 use Illuminate\Console\Scheduling\Schedule;
 use Livewire\Livewire;
+use Qubiqx\Qcommerce\Console\Commands\Exactonline\SyncProductsWithExactonlineCommand;
 use Qubiqx\QcommerceEcommerceCore\Models\Order;
 use Qubiqx\QcommerceEcommerceCore\Models\Product;
 use Qubiqx\QcommerceEcommerceExactonline\Commands\PushOrdersToExactonlineCommand;
@@ -76,7 +77,10 @@ class QcommerceEcommerceExactonlineServiceProvider extends PluginServiceProvider
                 'exactonlineRoutes',
             ])
             ->hasCommands([
-//                PushOrdersToEboekhoudenCommand::class,
+                RefreshExactonlineTokenCommand::class,
+                PushProductsToExactonlineCommand::class,
+                SyncProductsWithExactonlineCommand::class,
+                PushOrdersToExactonlineCommand::class,
             ]);
     }
 
