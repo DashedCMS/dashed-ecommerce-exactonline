@@ -125,7 +125,7 @@ class Exactonline
         $response = json_decode($content, true);
 
         if (!isset($response['access_token'])) {
-            if ($response['error_description'] == 'Rate limit exceeded: access_token not expired') {
+            if (isset($response['error_description']) && $response['error_description'] == 'Rate limit exceeded: access_token not expired') {
                 dump('rate limit, do nothing');
 
                 return;
