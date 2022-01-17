@@ -2,6 +2,7 @@
 
 namespace Qubiqx\QcommerceEcommerceExactonline\Listeners;
 
+use Qubiqx\QcommerceCore\Models\Customsetting;
 use Qubiqx\QcommerceEcommerceCore\Events\Orders\InvoiceCreatedEvent;
 use Qubiqx\QcommerceEcommerceExactonline\Classes\Exactonline;
 
@@ -25,7 +26,7 @@ class MarkOrderAsPushableListener
      */
     public function handle(InvoiceCreatedEvent $event)
     {
-        if (Exactonline::isConnected($event->order->site_id) && ! $event->order->exactonlineOrder) {
+        if (Customsetting::get('exactonline_client_id', $event->order->site_id) && ! $event->order->exactonlineOrder) {
             $event->order->exactonlineOrder()->create([]);
         }
     }
