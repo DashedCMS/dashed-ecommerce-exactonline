@@ -4,7 +4,6 @@ namespace Qubiqx\QcommerceEcommerceExactonline\Listeners;
 
 use Qubiqx\QcommerceCore\Models\Customsetting;
 use Qubiqx\QcommerceEcommerceCore\Events\Orders\InvoiceCreatedEvent;
-use Qubiqx\QcommerceEcommerceExactonline\Classes\Exactonline;
 
 class MarkOrderAsPushableListener
 {

@@ -21,7 +21,7 @@ class ShowExactonlineOrder extends Component
 
     public function submit()
     {
-        if (!$this->order->exactonlineOrder) {
+        if (! $this->order->exactonlineOrder) {
             $this->emit('notify', [
                 'status' => 'error',
                 'message' => 'De bestelling mag niet naar Exactonline gepushed worden.',
@@ -50,7 +50,7 @@ class ShowExactonlineOrder extends Component
 
     public function addToExact()
     {
-        if (Customsetting::get('exactonline_client_id', $this->order->site_id) && !$this->order->exactonlineOrder) {
+        if (Customsetting::get('exactonline_client_id', $this->order->site_id) && ! $this->order->exactonlineOrder) {
             $this->order->exactonlineOrder()->create([]);
         }
 
