@@ -53,5 +53,11 @@ class ShowExactonlineOrder extends Component
         if (Customsetting::get('exactonline_client_id', $this->order->site_id) && !$this->order->exactonlineOrder) {
             $this->order->exactonlineOrder()->create([]);
         }
+
+        $this->emit('refreshPage');
+        $this->emit('notify', [
+            'status' => 'success',
+            'message' => 'De bestelling wordt binnen enkele minuten naar Exactonline gepushed.',
+        ]);
     }
 }
