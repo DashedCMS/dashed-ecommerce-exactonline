@@ -64,17 +64,17 @@ class ExactonlineSettingsPage extends Page implements HasForms
                         'default' => 1,
                         'lg' => 2,
                     ]),
-                TextInput::make("exactonline_customer_id_{$site['id']}")
+                TextInput::make("exactonline_client_id_{$site['id']}")
                     ->label('Exactonline client ID')
                     ->rules([
                         'max:255',
                     ]),
-                TextInput::make("exactonline_client_id_{$site['id']}")
+                TextInput::make("exactonline_client_secret_{$site['id']}")
                     ->label('Exactonline client secret')
                     ->rules([
                         'max:255',
                     ]),
-                TextInput::make("exactonline_client_secret_{$site['id']}")
+                TextInput::make("exactonline_division_{$site['id']}")
                     ->label('Exactonline division')
                     ->rules([
                         'max:255',
@@ -104,6 +104,11 @@ class ExactonlineSettingsPage extends Page implements HasForms
                     ->required()
                     ->options(Exactonline::getCustomers($site['id']))
                     ->visible((Customsetting::get('exactonline_connected', $site['id'], 0) ? true : false)),
+                Select::make("exactonline_customer_id_{$site['id']}")
+                    ->label('Exactonline customer ID (alle bestellingen worden op deze klant geboekt)')
+                    ->required()
+                    ->options(Exactonline::getCustomers($site['id']))
+                    ->visible((Customsetting::get('exactonline_connected', $site['id'], 0) ? true : false)),
                 Placeholder::make("")
                     ->label('Maak de connectie af, bezoek: ' . route('qcommerce.exactonline.authenticate', [$site['id']]))
                     ->hidden((Customsetting::get('exactonline_connected', $site['id'], 0) ? true : false)),
@@ -128,13 +133,13 @@ class ExactonlineSettingsPage extends Page implements HasForms
         $sites = Sites::getSites();
 
         foreach ($sites as $site) {
-            Customsetting::set('exactonline_customer_id', $this->form->getState()["exactonline_customer_id_{$site['id']}"], $site['id']);
             Customsetting::set('exactonline_client_id', $this->form->getState()["exactonline_client_id_{$site['id']}"], $site['id']);
             Customsetting::set('exactonline_client_secret', $this->form->getState()["exactonline_client_secret_{$site['id']}"], $site['id']);
+            Customsetting::set('exactonline_division', $this->form->getState()["exactonline_division_{$site['id']}"], $site['id']);
             Customsetting::set('exactonline_connected', Exactonline::isConnected($site['id']), $site['id']);
 
             if (Customsetting::get('exactonline_connected', $site['id'], 0) ? true : false) {
-                Customsetting::set('exactonline_division', $this->form->getState()["exactonline_division_{$site['id']}"], $site['id']);
+                Customsetting::set('exactonline_customer_id', $this->form->getState()["exactonline_customer_id_{$site['id']}"], $site['id']);
                 Customsetting::set('exactonline_vat_codes_gl_to_pay', $this->form->getState()["exactonline_vat_codes_gl_to_pay_{$site['id']}"], $site['id']);
                 Customsetting::set('exactonline_vat_codes_gl_to_claim', $this->form->getState()["exactonline_vat_codes_gl_to_claim_{$site['id']}"], $site['id']);
                 Customsetting::set('exactonline_payment_costs_product_id', $this->form->getState()["exactonline_payment_costs_product_id_{$site['id']}"], $site['id']);

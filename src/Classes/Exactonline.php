@@ -161,57 +161,57 @@ class Exactonline
 //        }
     }
 
-//    public static function getDivision($siteId = null)
-//    {
-//        if (!$siteId) {
-//            $siteId = Sites::getActive();
-//        }
-//
-//        try {
-//            $ch = curl_init();
-//
-//            if ($ch === false) {
-//                throw new Exception('failed to initialize');
-//            }
-//
-//            curl_setopt_array($ch, [
-//                CURLOPT_URL => 'https://start.exactonline.nl/api/v1/current/Me?$select=CurrentDivision',
-//                CURLOPT_RETURNTRANSFER => true,
-//                CURLOPT_ENCODING => "",
-//                CURLOPT_MAXREDIRS => 10,
-//                CURLOPT_TIMEOUT => 0,
-//                CURLOPT_FOLLOWLOCATION => true,
-//                CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-//                CURLOPT_CUSTOMREQUEST => "GET",
-//                CURLOPT_HTTPHEADER => [
-//                    "Content-Type: application/x-www-form-urlencoded",
-//                    "Accept: application/json",
-//                    "Authorization: Bearer " . Customsetting::get('exactonline_access_token', $siteId),
-//                ],
-//            ]);
-//
-//            $content = curl_exec($ch);
-//
-//            if ($content === false) {
-//                throw new Exception(curl_error($ch), curl_errno($ch));
-//            }
-//            curl_close($ch);
-//            $content = json_decode($content, true);
-//            dd($content);
-//            $division = $content['d']['results'][0]['CurrentDivision'];
-//            Customsetting::set('exactonline_division', $division, $siteId);
-//            return $division;
-//        } catch (Exception $e) {
-//            trigger_error(
-//                sprintf(
-//                    'Curl failed with error #%d: %s',
-//                    $e->getCode(),
-//                    $e->getMessage()
-//                ),
-//                E_USER_ERROR
-//            );
-//        }
-//    }
+    public static function getDivision($siteId = null)
+    {
+        if (!$siteId) {
+            $siteId = Sites::getActive();
+        }
+
+        try {
+            $ch = curl_init();
+
+            if ($ch === false) {
+                throw new Exception('failed to initialize');
+            }
+
+            curl_setopt_array($ch, [
+                CURLOPT_URL => 'https://start.exactonline.nl/api/v1/current/Me?$select=CurrentDivision',
+                CURLOPT_RETURNTRANSFER => true,
+                CURLOPT_ENCODING => "",
+                CURLOPT_MAXREDIRS => 10,
+                CURLOPT_TIMEOUT => 0,
+                CURLOPT_FOLLOWLOCATION => true,
+                CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+                CURLOPT_CUSTOMREQUEST => "GET",
+                CURLOPT_HTTPHEADER => [
+                    "Content-Type: application/x-www-form-urlencoded",
+                    "Accept: application/json",
+                    "Authorization: Bearer " . Customsetting::get('exactonline_access_token', $siteId),
+                ],
+            ]);
+
+            $content = curl_exec($ch);
+
+            if ($content === false) {
+                throw new Exception(curl_error($ch), curl_errno($ch));
+            }
+            curl_close($ch);
+            $content = json_decode($content, true);
+            dd($content);
+            $division = $content['d']['results'][0]['CurrentDivision'];
+            Customsetting::set('exactonline_division', $division, $siteId);
+            return $division;
+        } catch (Exception $e) {
+            trigger_error(
+                sprintf(
+                    'Curl failed with error #%d: %s',
+                    $e->getCode(),
+                    $e->getMessage()
+                ),
+                E_USER_ERROR
+            );
+        }
+    }
 
     public static function pushProduct(Product $product, $siteId = null)
     {
@@ -572,6 +572,7 @@ class Exactonline
         ]);
 
         $content = curl_exec($ch);
+//        dd(Customsetting::get('exactonline_division', $siteId), Customsetting::get('exactonline_access_token', $siteId), $content);
 
         if ($content === false) {
             throw new Exception(curl_error($ch), curl_errno($ch));
