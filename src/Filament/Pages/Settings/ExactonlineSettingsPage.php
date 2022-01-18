@@ -58,7 +58,7 @@ class ExactonlineSettingsPage extends Page implements HasForms
                         'lg' => 2,
                     ]),
                 Placeholder::make('label')
-                    ->label("Exactonline is " . (!Customsetting::get('exactonline_connected', $site['id'], 0) ? 'niet' : '') . ' geconnect')
+                    ->label("Exactonline is " . (! Customsetting::get('exactonline_connected', $site['id'], 0) ? 'niet' : '') . ' geconnect')
                     ->content(Customsetting::get('exactonline_connection_error', $site['id'], ''))
                     ->columnSpan([
                         'default' => 1,
