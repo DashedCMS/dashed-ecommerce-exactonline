@@ -102,7 +102,7 @@ class ExactonlineSettingsPage extends Page implements HasForms
                 Select::make("exactonline_customer_id_{$site['id']}")
                     ->label('Exactonline customer ID (alle bestellingen worden op deze klant geboekt)')
                     ->required()
-                    ->options(collect(Exactonline::getItems($site['id']))->pluck('Description', 'ID'))
+                    ->options(collect(Exactonline::getCustomers($site['id']))->pluck('Name', 'ID'))
                     ->visible(fn () => (Customsetting::get('exactonline_connected', $site['id'], 0) ? true : false)),
 //                Select::make("exactonline_customer_id_{$site['id']}")
 //                    ->label('Exactonline customer ID (alle bestellingen worden op deze klant geboekt)')
