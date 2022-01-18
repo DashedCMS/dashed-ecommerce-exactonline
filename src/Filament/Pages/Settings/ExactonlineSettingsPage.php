@@ -79,11 +79,11 @@ class ExactonlineSettingsPage extends Page implements HasForms
                     ->rules([
                         'max:255',
                     ]),
-//                Select::make("exactonline_division_{$site['id']}")
-//                    ->label('Exactonline VAT rate GL rekening ID (to pay)')
-//                    ->required()
-//                    ->options(Exactonline::getGLAccounts($site['id']))
-//                    ->visible(Customsetting::get('exactonline_connected', $site['id'], 0) ? true : false),
+                Select::make("exactonline_division_{$site['id']}")
+                    ->label('Exactonline VAT rate GL rekening ID (to pay)')
+                    ->required()
+                    ->options(Exactonline::getGLAccounts($site['id']))
+                    ->visible(Customsetting::get('exactonline_connected', $site['id'], 0) ? true : false),
 //                Select::make("exactonline_vat_codes_gl_to_pay_{$site['id']}")
 //                    ->label('Exactonline VAT rate GL rekening ID (to claim)')
 //                    ->required()
