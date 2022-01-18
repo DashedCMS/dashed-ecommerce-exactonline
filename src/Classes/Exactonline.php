@@ -163,7 +163,7 @@ class Exactonline
 
     public static function getDivision($siteId = null)
     {
-        if (!$siteId) {
+        if (! $siteId) {
             $siteId = Sites::getActive();
         }
 
@@ -200,6 +200,7 @@ class Exactonline
             dd($content);
             $division = $content['d']['results'][0]['CurrentDivision'];
             Customsetting::set('exactonline_division', $division, $siteId);
+
             return $division;
         } catch (Exception $e) {
             trigger_error(
