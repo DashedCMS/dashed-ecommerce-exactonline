@@ -17,12 +17,14 @@ class ExactonlineController extends FrontendController
         return Exactonline::authenticate($site['id']);
     }
 
-    public function exchange(Request $request, $siteId = null)
+    public function saveAuthentication(Request $request, $siteId = null)
     {
         $site = Sites::get($siteId);
 
         $code = $request->code;
-        Exactonline::saveAuthentication($code, $site['id']);
+        if ($code) {
+            Exactonline::saveAuthentication($code, $site['id']);
+        }
 
         return redirect(ExactonlineSettingsPage::getUrl());
     }
