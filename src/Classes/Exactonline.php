@@ -50,7 +50,7 @@ class Exactonline
                 CURLOPT_FOLLOWLOCATION => true,
                 CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
                 CURLOPT_CUSTOMREQUEST => "POST",
-                CURLOPT_POSTFIELDS => "code=" . $code . "&redirect_uri=" . route('qcommerce.frontend.exactonline.save-authentication', $siteId) . "&grant_type=authorization_code&client_id=" . Customsetting::get('exactonline_client_id', $siteId) . "&client_secret=" . Customsetting::get('exactonline_client_secret', $siteId),
+                CURLOPT_POSTFIELDS => "code=" . $code . "&redirect_uri=" . route('qcommerce.exactonline.save-authentication', $siteId) . "&grant_type=authorization_code&client_id=" . Customsetting::get('exactonline_client_id', $siteId) . "&client_secret=" . Customsetting::get('exactonline_client_secret', $siteId),
                 CURLOPT_HTTPHEADER => [
                     "Content-Type: application/x-www-form-urlencoded",
                     "Accept: application/json",
