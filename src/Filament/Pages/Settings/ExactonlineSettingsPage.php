@@ -58,7 +58,7 @@ class ExactonlineSettingsPage extends Page implements HasForms
                         'lg' => 2,
                     ]),
                 Placeholder::make('label')
-                    ->label("Exactonline is " . (! Customsetting::get('exactonline_connected', $site['id'], 0) ? 'niet' : '') . ' geconnect')
+                    ->label("Exactonline is " . (!Customsetting::get('exactonline_connected', $site['id'], 0) ? 'niet' : '') . ' geconnect')
                     ->content(Customsetting::get('exactonline_connection_error', $site['id'], ''))
                     ->columnSpan([
                         'default' => 1,
@@ -83,30 +83,30 @@ class ExactonlineSettingsPage extends Page implements HasForms
                     ->label('Exactonline VAT rate GL rekening ID (to pay)')
                     ->required()
                     ->options(Exactonline::getGLAccounts($site['id']))
-                    ->visible(fn() => (bool)Customsetting::get('exactonline_connected', $site['id'], 0)),
-//                Select::make("exactonline_vat_codes_gl_to_pay_{$site['id']}")
-//                    ->label('Exactonline VAT rate GL rekening ID (to claim)')
-//                    ->required()
-//                    ->options(Exactonline::getGLAccounts($site['id']))
-//                    ->visible(Customsetting::get('exactonline_connected', $site['id'], 0) ? true : false),
-//                Select::make("exactonline_vat_codes_gl_to_claim_{$site['id']}")
-//                    ->label('Exactonline product om betalingskosten op te boeken')
-//                    ->required()
-//                    ->options(Exactonline::getItems($site['id']))
-//                    ->visible(Customsetting::get('exactonline_connected', $site['id'], 0) ? true : false),
-//                Select::make("exactonline_payment_costs_product_id_{$site['id']}")
-//                    ->label('Exactonline product om verzendkosten op te boeken')
-//                    ->required()
-//                    ->options(Exactonline::getItems($site['id']))
-//                    ->visible(Customsetting::get('exactonline_connected', $site['id'], 0) ? true : false),
-//                Select::make("exactonline_shipping_costs_product_id_{$site['id']}")
-//                    ->label('Exactonline customer ID (alle bestellingen worden op deze klant geboekt)')
-//                    ->required()
-//                    ->options(Exactonline::getCustomers($site['id']))
-//                    ->visible(Customsetting::get('exactonline_connected', $site['id'], 0) ? true : false),
+                    ->visible((Customsetting::get('exactonline_connected', $site['id'], 0) ? true : false)),
+                Select::make("exactonline_vat_codes_gl_to_pay_{$site['id']}")
+                    ->label('Exactonline VAT rate GL rekening ID (to claim)')
+                    ->required()
+                    ->options(Exactonline::getGLAccounts($site['id']))
+                    ->visible((Customsetting::get('exactonline_connected', $site['id'], 0) ? true : false)),
+                Select::make("exactonline_vat_codes_gl_to_claim_{$site['id']}")
+                    ->label('Exactonline product om betalingskosten op te boeken')
+                    ->required()
+                    ->options(Exactonline::getItems($site['id']))
+                    ->visible((Customsetting::get('exactonline_connected', $site['id'], 0) ? true : false)),
+                Select::make("exactonline_payment_costs_product_id_{$site['id']}")
+                    ->label('Exactonline product om verzendkosten op te boeken')
+                    ->required()
+                    ->options(Exactonline::getItems($site['id']))
+                    ->visible((Customsetting::get('exactonline_connected', $site['id'], 0) ? true : false)),
+                Select::make("exactonline_shipping_costs_product_id_{$site['id']}")
+                    ->label('Exactonline customer ID (alle bestellingen worden op deze klant geboekt)')
+                    ->required()
+                    ->options(Exactonline::getCustomers($site['id']))
+                    ->visible((Customsetting::get('exactonline_connected', $site['id'], 0) ? true : false)),
                 Placeholder::make("")
                     ->label('Maak de connectie af, bezoek: ' . route('qcommerce.exactonline.authenticate', [$site['id']]))
-                    ->hidden(Customsetting::get('exactonline_connected', $site['id'], 0) ? true : false),
+                    ->hidden((Customsetting::get('exactonline_connected', $site['id'], 0) ? true : false)),
             ];
 
             $tabs[] = Tab::make($site['id'])
