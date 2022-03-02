@@ -2,9 +2,9 @@
 
 namespace Qubiqx\QcommerceEcommerceExactonline;
 
+use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
 use Qubiqx\QcommerceEcommerceCore\Events\Orders\InvoiceCreatedEvent;
 use Qubiqx\QcommerceEcommerceExactonline\Listeners\MarkOrderAsPushableListener;
-use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
 
 class QcommerceEcommerceExactonlineEventServiceProvider extends ServiceProvider
 {
