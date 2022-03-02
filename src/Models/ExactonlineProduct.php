@@ -3,8 +3,8 @@
 namespace Qubiqx\QcommerceEcommerceExactonline\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Qubiqx\QcommerceEcommerceCore\Models\Product;
 use Spatie\Activitylog\Traits\LogsActivity;
+use Qubiqx\QcommerceEcommerceCore\Models\Product;
 
 class ExactonlineProduct extends Model
 {
