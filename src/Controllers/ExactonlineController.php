@@ -4,8 +4,8 @@ namespace Qubiqx\QcommerceEcommerceExactonline\Controllers;
 
 use Illuminate\Http\Request;
 use Qubiqx\QcommerceCore\Classes\Sites;
-use Qubiqx\QcommerceCore\Controllers\Frontend\FrontendController;
 use Qubiqx\QcommerceEcommerceExactonline\Classes\Exactonline;
+use Qubiqx\QcommerceCore\Controllers\Frontend\FrontendController;
 use Qubiqx\QcommerceEcommerceExactonline\Filament\Pages\Settings\ExactonlineSettingsPage;
 
 class ExactonlineController extends FrontendController

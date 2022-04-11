@@ -2,21 +2,21 @@
 
 namespace Qubiqx\QcommerceEcommerceExactonline;
 
-use Filament\PluginServiceProvider;
-use Illuminate\Console\Scheduling\Schedule;
 use Livewire\Livewire;
+use Filament\PluginServiceProvider;
+use Spatie\LaravelPackageTools\Package;
+use Illuminate\Console\Scheduling\Schedule;
 use Qubiqx\QcommerceEcommerceCore\Models\Order;
 use Qubiqx\QcommerceEcommerceCore\Models\Product;
-use Qubiqx\QcommerceEcommerceExactonline\Commands\PushOrdersToExactonlineCommand;
-use Qubiqx\QcommerceEcommerceExactonline\Commands\PushProductsToExactonlineCommand;
-use Qubiqx\QcommerceEcommerceExactonline\Commands\RefreshExactonlineTokenCommand;
-use Qubiqx\QcommerceEcommerceExactonline\Commands\SyncProductsWithExactonlineCommand;
-use Qubiqx\QcommerceEcommerceExactonline\Filament\Pages\Settings\ExactonlineSettingsPage;
-use Qubiqx\QcommerceEcommerceExactonline\Filament\Widgets\ExactonlineOrderStats;
-use Qubiqx\QcommerceEcommerceExactonline\Livewire\Orders\ShowExactonlineOrder;
 use Qubiqx\QcommerceEcommerceExactonline\Models\ExactonlineOrder;
 use Qubiqx\QcommerceEcommerceExactonline\Models\ExactonlineProduct;
-use Spatie\LaravelPackageTools\Package;
+use Qubiqx\QcommerceEcommerceExactonline\Livewire\Orders\ShowExactonlineOrder;
+use Qubiqx\QcommerceEcommerceExactonline\Filament\Widgets\ExactonlineOrderStats;
+use Qubiqx\QcommerceEcommerceExactonline\Commands\PushOrdersToExactonlineCommand;
+use Qubiqx\QcommerceEcommerceExactonline\Commands\RefreshExactonlineTokenCommand;
+use Qubiqx\QcommerceEcommerceExactonline\Commands\PushProductsToExactonlineCommand;
+use Qubiqx\QcommerceEcommerceExactonline\Commands\SyncProductsWithExactonlineCommand;
+use Qubiqx\QcommerceEcommerceExactonline\Filament\Pages\Settings\ExactonlineSettingsPage;
 
 class QcommerceEcommerceExactonlineServiceProvider extends PluginServiceProvider
 {

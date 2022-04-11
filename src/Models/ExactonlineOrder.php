@@ -2,9 +2,10 @@
 
 namespace Qubiqx\QcommerceEcommerceExactonline\Models;
 
+use Spatie\Activitylog\LogOptions;
 use Illuminate\Database\Eloquent\Model;
-use Qubiqx\QcommerceEcommerceCore\Models\Order;
 use Spatie\Activitylog\Traits\LogsActivity;
+use Qubiqx\QcommerceEcommerceCore\Models\Order;
 
 class ExactonlineOrder extends Model
 {
@@ -25,6 +26,11 @@ class ExactonlineOrder extends Model
         'created_at',
         'updated_at',
     ];
+
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults();
+    }
 
     public function order()
     {
