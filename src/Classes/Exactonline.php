@@ -12,7 +12,7 @@ class Exactonline
 {
     public static function isConnected($siteId = null)
     {
-        if (! $siteId) {
+        if (!$siteId) {
             $siteId = Sites::getActive();
         }
 
@@ -21,7 +21,7 @@ class Exactonline
 
     public static function authenticate($siteId = null)
     {
-        if (! $siteId) {
+        if (!$siteId) {
             $siteId = Sites::getActive();
         }
 
@@ -30,7 +30,7 @@ class Exactonline
 
     public static function saveAuthentication($code, $siteId = null)
     {
-        if (! $siteId) {
+        if (!$siteId) {
             $siteId = Sites::getActive();
         }
 
@@ -89,7 +89,7 @@ class Exactonline
 
     public static function refreshToken($siteId = null)
     {
-        if (! $siteId) {
+        if (!$siteId) {
             $siteId = Sites::getActive();
         }
 
@@ -125,7 +125,7 @@ class Exactonline
         curl_close($ch);
         $response = json_decode($content, true);
 
-        if (! isset($response['access_token'])) {
+        if (!isset($response['access_token'])) {
             if (isset($response['error_description']) && $response['error_description'] == 'Rate limit exceeded: access_token not expired') {
                 dump('rate limit, do nothing');
 
@@ -134,7 +134,7 @@ class Exactonline
             Customsetting::set('exactonline_connected', false, $siteId);
             Customsetting::set('exactonline_access_token', null, $siteId);
             Customsetting::set('exactonline_refresh_token', null, $siteId);
-            if (! Customsetting::get('exactonline_notified_of_logout', $siteId, false)) {
+            if (!Customsetting::get('exactonline_notified_of_logout', $siteId, false)) {
                 Mails::sendNotificationToAdmins('Exact is uitgelogd en moet opnieuw worden gekoppeld in Qcommerce');
                 Customsetting::set('exactonline_notified_of_logout', true, $siteId);
             }
@@ -163,7 +163,7 @@ class Exactonline
 
     public static function getDivision($siteId = null)
     {
-        if (! $siteId) {
+        if (!$siteId) {
             $siteId = Sites::getActive();
         }
 
@@ -216,11 +216,11 @@ class Exactonline
 
     public static function pushProduct(Product $product, $siteId = null)
     {
-        if (! $siteId) {
+        if (!$siteId) {
             $siteId = Sites::getActive();
         }
 
-        if (! self::isConnected($siteId) || ($product->exactonlineProduct && $product->exactonlineProduct->exactonline_id)) {
+        if (!self::isConnected($siteId) || ($product->exactonlineProduct && $product->exactonlineProduct->exactonline_id)) {
             return;
         }
 
@@ -265,11 +265,11 @@ class Exactonline
         $content = json_decode($content, true);
 
         $exactonlineProduct = $product->exactonlineProduct;
-        if (! $exactonlineProduct) {
+        if (!$exactonlineProduct) {
             $exactonlineProduct = $product->exactonlineProduct()->create();
         }
 
-        if (! isset($content['d'])) {
+        if (!isset($content['d'])) {
             $exactonlineProduct->error = $content['error']['message']['value'] ?? 'Er is iets fout gegaan';
             $exactonlineProduct->save();
 
@@ -295,11 +295,11 @@ class Exactonline
 
     public static function syncProduct(Product $product, $siteId = null)
     {
-        if (! $siteId) {
+        if (!$siteId) {
             $siteId = Sites::getActive();
         }
 
-        if (! $product->exactonlineProduct || ! $product->exactonlineProduct->exactonline_id) {
+        if (!$product->exactonlineProduct || !$product->exactonlineProduct->exactonline_id) {
             return;
         }
 
@@ -358,144 +358,9 @@ class Exactonline
 //        }
     }
 
-    public static function getGoodsReceipts()
-    {
-//        try {
-//            $ch = curl_init();
-//
-//            if ($ch === false) {
-//                throw new Exception('failed to initialize');
-//            }
-//
-//            curl_setopt_array($ch, [
-//                CURLOPT_URL => 'https://start.exactonline.nl/api/v1/' . Customsetting::get('exactonline_division', $siteId) . '/purchaseorder/GoodsReceipts?$select=ID,Created,Description',
-//                CURLOPT_RETURNTRANSFER => true,
-//                CURLOPT_ENCODING => "",
-//                CURLOPT_MAXREDIRS => 10,
-//                CURLOPT_TIMEOUT => 0,
-//                CURLOPT_FOLLOWLOCATION => true,
-//                CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-//                CURLOPT_CUSTOMREQUEST => "GET",
-//                CURLOPT_HTTPHEADER => [
-//                    "Content-Type: application/json",
-//                    "Accept: application/json",
-//                    "Authorization: Bearer " . Customsetting::get('exactonline_access_token', $siteId),
-//                ],
-//            ]);
-//
-//            $content = curl_exec($ch);
-//
-//            if ($content === false) {
-//                throw new Exception(curl_error($ch), curl_errno($ch));
-//            }
-//            curl_close($ch);
-//            $content = json_decode($content, true);
-//            return $content;
-//        } catch (Exception $e) {
-//            trigger_error(
-//                sprintf(
-//                    'Curl failed with error #%d: %s',
-//                    $e->getCode(),
-//                    $e->getMessage()
-//                ),
-//                E_USER_ERROR
-//            );
-//        }
-    }
-
-    public static function getGoodsReceiptLines()
-    {
-//        try {
-//            $ch = curl_init();
-//
-//            if ($ch === false) {
-//                throw new Exception('failed to initialize');
-//            }
-//
-//            curl_setopt_array($ch, [
-//                CURLOPT_URL => 'https://start.exactonline.nl/api/v1/' . Customsetting::get('exactonline_division', $siteId) . '/purchaseorder/GoodsReceiptLines?$select=ID,BatchNumbers,Item,ItemCode,ItemDescription,QuantityOrdered,QuantityReceived&$expand=BatchNumbers',
-//                CURLOPT_RETURNTRANSFER => true,
-//                CURLOPT_ENCODING => "",
-//                CURLOPT_MAXREDIRS => 10,
-//                CURLOPT_TIMEOUT => 0,
-//                CURLOPT_FOLLOWLOCATION => true,
-//                CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-//                CURLOPT_CUSTOMREQUEST => "GET",
-//                CURLOPT_HTTPHEADER => [
-//                    "Content-Type: application/json",
-//                    "Accept: application/json",
-//                    "Authorization: Bearer " . Customsetting::get('exactonline_access_token', $siteId),
-//                ],
-//            ]);
-//
-//            $content = curl_exec($ch);
-//
-//            if ($content === false) {
-//                throw new Exception(curl_error($ch), curl_errno($ch));
-//            }
-//            curl_close($ch);
-//            $content = json_decode($content, true);
-//            return $content;
-//        } catch (Exception $e) {
-//            trigger_error(
-//                sprintf(
-//                    'Curl failed with error #%d: %s',
-//                    $e->getCode(),
-//                    $e->getMessage()
-//                ),
-//                E_USER_ERROR
-//            );
-//        }
-    }
-
-    public static function getGoodsDeliveryLines()
-    {
-//        try {
-//            $ch = curl_init();
-//
-//            if ($ch === false) {
-//                throw new Exception('failed to initialize');
-//            }
-//
-//            curl_setopt_array($ch, [
-//                CURLOPT_URL => 'https://start.exactonline.nl/api/v1/' . Customsetting::get('exactonline_division', $siteId) . '/salesorder/GoodsDeliveryLines?$select=ID,BatchNumbers,Item,ItemCode,ItemDescription,QuantityOrdered',
-//                CURLOPT_RETURNTRANSFER => true,
-//                CURLOPT_ENCODING => "",
-//                CURLOPT_MAXREDIRS => 10,
-//                CURLOPT_TIMEOUT => 0,
-//                CURLOPT_FOLLOWLOCATION => true,
-//                CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-//                CURLOPT_CUSTOMREQUEST => "GET",
-//                CURLOPT_HTTPHEADER => [
-//                    "Content-Type: application/json",
-//                    "Accept: application/json",
-//                    "Authorization: Bearer " . Customsetting::get('exactonline_access_token', $siteId),
-//                ],
-//            ]);
-//
-//            $content = curl_exec($ch);
-//
-//            if ($content === false) {
-//                throw new Exception(curl_error($ch), curl_errno($ch));
-//            }
-//            curl_close($ch);
-//            $content = json_decode($content, true);
-//            return $content;
-//        } catch (Exception $e) {
-//            trigger_error(
-//                sprintf(
-//                    'Curl failed with error #%d: %s',
-//                    $e->getCode(),
-//                    $e->getMessage()
-//                ),
-//                E_USER_ERROR
-//            );
-//        }
-    }
-
     public static function getCustomers($siteId = null)
     {
-        if (! $siteId) {
+        if (!$siteId) {
             $siteId = Sites::getActive();
         }
 
@@ -545,7 +410,7 @@ class Exactonline
 
     public static function getGLAccounts($siteId = null)
     {
-        if (! $siteId) {
+        if (!$siteId) {
             $siteId = Sites::getActive();
         }
 
@@ -632,7 +497,7 @@ class Exactonline
 
     public static function getItems($siteId = null)
     {
-        if (! $siteId) {
+        if (!$siteId) {
             $siteId = Sites::getActive();
         }
 
@@ -718,7 +583,7 @@ class Exactonline
 
     public static function pushOrder($order)
     {
-        if (! self::isConnected($order->site_short) || ! $order->exactonlineOrder || $order->exactonlineOrder->pushed == 1) {
+        if (!self::isConnected($order->site_short) || !$order->exactonlineOrder || $order->exactonlineOrder->pushed == 1) {
             return;
         }
 
@@ -727,51 +592,53 @@ class Exactonline
 //            try {
             $salesOrderLines = [];
             foreach ($order->orderProducts as $orderProduct) {
-                $vatRate = $orderProduct->vat_rate;
-                $vatCodeId = null;
-                $exactonlineProductId = null;
+                if (!$orderProduct->product->is_bundle) {
+                    $vatRate = $orderProduct->vat_rate;
+                    $vatCodeId = null;
+                    $exactonlineProductId = null;
 
-                if ($orderProduct->product) {
+                    if ($orderProduct->product) {
 //                    $vatCodeId = $orderProduct->product ? $orderProduct->product->exactonlineProduct->vat_code_id : null;
-                    $exactonlineProductId = $orderProduct->product->exactonlineProduct->exactonline_id;
-                }
-
-                if ($orderProduct->sku == 'payment_costs') {
-                    $exactonlineProductId = Customsetting::get('exactonline_payment_costs_product_id', $order->site_short);
-                    if (! $exactonlineProductId) {
-                        $order->exactonlineOrder->pushed = 2;
-                        $order->exactonlineOrder->error = 'Betaalmethode kosten zit nog niet aan een product in Exactonline gekoppeld';
-                        $order->exactonlineOrder->save();
-                        Mails::sendNotificationToAdmins('Order #' . $order->id . ' failed to push to Exactonline');
-
-                        return;
+                        $exactonlineProductId = $orderProduct->product->exactonlineProduct->exactonline_id;
                     }
-                } elseif ($orderProduct->sku == 'shipping_costs') {
-                    $exactonlineProductId = Customsetting::get('exactonline_shipping_costs_product_id', $order->site_short);
-                    if (! $exactonlineProductId) {
-                        $order->exactonlineOrder->pushed = 2;
-                        $order->exactonlineOrder->error = 'Verzend kosten zit nog niet aan een product in Exactonline gekoppeld';
-                        $order->exactonlineOrder->save();
-                        Mails::sendNotificationToAdmins('Order #' . $order->id . ' failed to push to Exactonline');
 
-                        return;
+                    if ($orderProduct->sku == 'payment_costs') {
+                        $exactonlineProductId = Customsetting::get('exactonline_payment_costs_product_id', $order->site_short);
+                        if (!$exactonlineProductId) {
+                            $order->exactonlineOrder->pushed = 2;
+                            $order->exactonlineOrder->error = 'Betaalmethode kosten zit nog niet aan een product in Exactonline gekoppeld';
+                            $order->exactonlineOrder->save();
+                            Mails::sendNotificationToAdmins('Order #' . $order->id . ' failed to push to Exactonline');
+
+                            return;
+                        }
+                    } elseif ($orderProduct->sku == 'shipping_costs') {
+                        $exactonlineProductId = Customsetting::get('exactonline_shipping_costs_product_id', $order->site_short);
+                        if (!$exactonlineProductId) {
+                            $order->exactonlineOrder->pushed = 2;
+                            $order->exactonlineOrder->error = 'Verzend kosten zit nog niet aan een product in Exactonline gekoppeld';
+                            $order->exactonlineOrder->save();
+                            Mails::sendNotificationToAdmins('Order #' . $order->id . ' failed to push to Exactonline');
+
+                            return;
+                        }
                     }
-                }
 
-                if (! $vatCodeId) {
-                    $vatCodeId = self::getVatCodeIdForVateRate($vatRate, $order->site_short);
-                }
+                    if (!$vatCodeId) {
+                        $vatCodeId = self::getVatCodeIdForVateRate($vatRate, $order->site_short);
+                    }
 
-                $data = [
-                    'NetPrice' => $orderProduct->priceWithoutDiscount / $orderProduct->quantity,
-                    'Item' => $exactonlineProductId,
-                    'Description' => $orderProduct->name,
-                    'VATAmount' => $orderProduct->vatWithoutDiscount / $orderProduct->quantity,
+                    $data = [
+                        'NetPrice' => $orderProduct->priceWithoutDiscount / $orderProduct->quantity,
+                        'Item' => $exactonlineProductId,
+                        'Description' => $orderProduct->name,
+                        'VATAmount' => $orderProduct->vatWithoutDiscount / $orderProduct->quantity,
 //                    'VATPercentage' => $orderProduct->vat_rate,
-                    'VATCode' => $vatCodeId,
-                    'Quantity' => $orderProduct->quantity,
-                ];
-                $salesOrderLines[] = $data;
+                        'VATCode' => $vatCodeId,
+                        'Quantity' => $orderProduct->quantity,
+                    ];
+                    $salesOrderLines[] = $data;
+                }
             }
 
 //            if ($order->payment_costs > 0.00) {
@@ -852,7 +719,7 @@ class Exactonline
                 }
             }
 //            } catch (Exception $e) {
-////                if ($order->exactonlineOrder->pushed != 2) {
+            ////                if ($order->exactonlineOrder->pushed != 2) {
 //                $order->exactonlineOrder->pushed = 2;
 //                $order->exactonlineOrder->error = 'Er ging iets mis met pushen naar Exactonline: ' . $e->getMessage();
 //                $order->exactonlineOrder->save();
@@ -865,7 +732,7 @@ class Exactonline
 //                    }
 //                } catch (\Exception $e) {
 //                }
-////                }
+            ////                }
 //
 //                trigger_error(
 //                    sprintf(
@@ -881,7 +748,7 @@ class Exactonline
 
     public static function getVatCodes($siteId = null)
     {
-        if (! $siteId) {
+        if (!$siteId) {
             $siteId = Sites::getActive();
         }
 
@@ -931,7 +798,7 @@ class Exactonline
 
     public static function getVatCodeIdForVateRate($vatRate, $siteId = null)
     {
-        if (! $siteId) {
+        if (!$siteId) {
             $siteId = Sites::getActive();
         }
 

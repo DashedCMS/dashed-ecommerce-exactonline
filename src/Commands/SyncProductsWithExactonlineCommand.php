@@ -40,7 +40,7 @@ class SyncProductsWithExactonlineCommand extends Command
     public function handle()
     {
         if (Exactonline::isConnected()) {
-            foreach (Product::publicShowable()->get() as $product) {
+            foreach (Product::publicShowable()->isNotBundle()->get() as $product) {
                 Exactonline::syncProduct($product);
             }
         }
