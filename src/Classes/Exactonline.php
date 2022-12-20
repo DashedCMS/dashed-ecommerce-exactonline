@@ -671,6 +671,7 @@ class Exactonline
                 'Description' => 'Order #' . $order->invoice_id,
                 'OrderNumber' => $order->id,
                 'SalesOrderLines' => $salesOrderLines,
+                'AmountDiscount' => $order->discount,
             ];
             $data = json_encode($data);
 
