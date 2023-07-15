@@ -29,7 +29,7 @@ class QcommerceEcommerceExactonlineServiceProvider extends PluginServiceProvider
             $schedule->command(RefreshExactonlineTokenCommand::class)->everyMinute();
             $schedule->command(PushProductsToExactonlineCommand::class)->everyFifteenMinutes();
             //Only for vat rate atm, but not used
-//                    $schedule->command(SyncProductsWithExactonlineCommand::class)->everyFifteenMinutes();
+            //                    $schedule->command(SyncProductsWithExactonlineCommand::class)->everyFifteenMinutes();
             $schedule->command(PushOrdersToExactonlineCommand::class)->everyMinute();
         });
 

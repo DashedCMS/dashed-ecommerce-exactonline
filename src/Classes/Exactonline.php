@@ -93,8 +93,8 @@ class Exactonline
             $siteId = Sites::getActive();
         }
 
-//        if (Customsetting::get('exactonline_connected', $siteId)) {
-//            try {
+        //        if (Customsetting::get('exactonline_connected', $siteId)) {
+        //            try {
         $ch = curl_init();
 
         if ($ch === false) {
@@ -144,21 +144,21 @@ class Exactonline
             Customsetting::set('exactonline_connected', true, $siteId);
             Customsetting::set('exactonline_notified_of_logout', false, $siteId);
         }
-//            } catch (Exception $e) {
-//                Customsetting::set('exactonline_connected', false, $siteId);
-//                Customsetting::set('exactonline_access_token', null, $siteId);
-//                Customsetting::set('exactonline_refresh_token', null, $siteId);
-//                Mails::sendNotificationToAdmins('Exact is uitgelogd en moet opnieuw worden gekoppeld in Qcommerce');
-//                trigger_error(
-//                    sprintf(
-//                        'Curl failed with error #%d: %s',
-//                        $e->getCode(),
-//                        $e->getMessage()
-//                    ),
-//                    E_USER_ERROR
-//                );
-//            }
-//        }
+        //            } catch (Exception $e) {
+        //                Customsetting::set('exactonline_connected', false, $siteId);
+        //                Customsetting::set('exactonline_access_token', null, $siteId);
+        //                Customsetting::set('exactonline_refresh_token', null, $siteId);
+        //                Mails::sendNotificationToAdmins('Exact is uitgelogd en moet opnieuw worden gekoppeld in Qcommerce');
+        //                trigger_error(
+        //                    sprintf(
+        //                        'Curl failed with error #%d: %s',
+        //                        $e->getCode(),
+        //                        $e->getMessage()
+        //                    ),
+        //                    E_USER_ERROR
+        //                );
+        //            }
+        //        }
     }
 
     public static function getDivision($siteId = null)
@@ -224,7 +224,7 @@ class Exactonline
             return;
         }
 
-//        try {
+        //        try {
         $ch = curl_init();
 
         if ($ch === false) {
@@ -281,16 +281,16 @@ class Exactonline
 
             return $content['d'];
         }
-//        } catch (Exception $e) {
-//            trigger_error(
-//                sprintf(
-//                    'Curl failed with error #%d: %s',
-//                    $e->getCode(),
-//                    $e->getMessage()
-//                ),
-//                E_USER_ERROR
-//            );
-//        }
+        //        } catch (Exception $e) {
+        //            trigger_error(
+        //                sprintf(
+        //                    'Curl failed with error #%d: %s',
+        //                    $e->getCode(),
+        //                    $e->getMessage()
+        //                ),
+        //                E_USER_ERROR
+        //            );
+        //        }
     }
 
     public static function syncProduct(Product $product, $siteId = null)
@@ -303,7 +303,7 @@ class Exactonline
             return;
         }
 
-//        try {
+        //        try {
         $ch = curl_init();
 
         if ($ch === false) {
@@ -346,16 +346,16 @@ class Exactonline
         $product->exactonlineProduct->vat_code_id = $content['d']['SalesVatCode'];
         $product->exactonlineProduct->save();
 
-//        } catch (Exception $e) {
-//            trigger_error(
-//                sprintf(
-//                    'Curl failed with error #%d: %s',
-//                    $e->getCode(),
-//                    $e->getMessage()
-//                ),
-//                E_USER_ERROR
-//            );
-//        }
+        //        } catch (Exception $e) {
+        //            trigger_error(
+        //                sprintf(
+        //                    'Curl failed with error #%d: %s',
+        //                    $e->getCode(),
+        //                    $e->getMessage()
+        //                ),
+        //                E_USER_ERROR
+        //            );
+        //        }
     }
 
     public static function getCustomers($siteId = null)
@@ -364,7 +364,7 @@ class Exactonline
             $siteId = Sites::getActive();
         }
 
-//        try {
+        //        try {
         $ch = curl_init();
 
         if ($ch === false) {
@@ -396,16 +396,16 @@ class Exactonline
         $content = json_decode($content, true);
 
         return $content['d']['results'] ?? [];
-//        } catch (Exception $e) {
-//            trigger_error(
-//                sprintf(
-//                    'Curl failed with error #%d: %s',
-//                    $e->getCode(),
-//                    $e->getMessage()
-//                ),
-//                E_USER_ERROR
-//            );
-//        }
+        //        } catch (Exception $e) {
+        //            trigger_error(
+        //                sprintf(
+        //                    'Curl failed with error #%d: %s',
+        //                    $e->getCode(),
+        //                    $e->getMessage()
+        //                ),
+        //                E_USER_ERROR
+        //            );
+        //        }
     }
 
     public static function getGLAccounts($siteId = null)
@@ -414,7 +414,7 @@ class Exactonline
             $siteId = Sites::getActive();
         }
 
-//        try {
+        //        try {
         $ch = curl_init();
 
         if ($ch === false) {
@@ -438,7 +438,7 @@ class Exactonline
         ]);
 
         $content = curl_exec($ch);
-//        dd(Customsetting::get('exactonline_division', $siteId), Customsetting::get('exactonline_access_token', $siteId), $content);
+        //        dd(Customsetting::get('exactonline_division', $siteId), Customsetting::get('exactonline_access_token', $siteId), $content);
 
         if ($content === false) {
             throw new Exception(curl_error($ch), curl_errno($ch));
@@ -483,16 +483,16 @@ class Exactonline
         }
 
         return $results;
-//        } catch (Exception $e) {
-//            trigger_error(
-//                sprintf(
-//                    'Curl failed with error #%d: %s',
-//                    $e->getCode(),
-//                    $e->getMessage()
-//                ),
-//                E_USER_ERROR
-//            );
-//        }
+        //        } catch (Exception $e) {
+        //            trigger_error(
+        //                sprintf(
+        //                    'Curl failed with error #%d: %s',
+        //                    $e->getCode(),
+        //                    $e->getMessage()
+        //                ),
+        //                E_USER_ERROR
+        //            );
+        //        }
     }
 
     public static function getItems($siteId = null)
@@ -501,7 +501,7 @@ class Exactonline
             $siteId = Sites::getActive();
         }
 
-//        try {
+        //        try {
         $ch = curl_init();
 
         if ($ch === false) {
@@ -569,16 +569,16 @@ class Exactonline
         }
 
         return $results;
-//        } catch (Exception $e) {
-//            trigger_error(
-//                sprintf(
-//                    'Curl failed with error #%d: %s',
-//                    $e->getCode(),
-//                    $e->getMessage()
-//                ),
-//                E_USER_ERROR
-//            );
-//        }
+        //        } catch (Exception $e) {
+        //            trigger_error(
+        //                sprintf(
+        //                    'Curl failed with error #%d: %s',
+        //                    $e->getCode(),
+        //                    $e->getMessage()
+        //                ),
+        //                E_USER_ERROR
+        //            );
+        //        }
     }
 
     public static function pushOrder($order)
@@ -589,7 +589,7 @@ class Exactonline
 
         $exactCustomerId = Customsetting::get('exactonline_customer_id', $order->site_short);
         if ($exactCustomerId && $order->isPaidFor()) {
-//            try {
+            //            try {
 
             $discount = $order->discount;
 
@@ -610,7 +610,7 @@ class Exactonline
                 $exactonlineProductId = null;
 
                 if ($orderProduct->product) {
-//                    $vatCodeId = $orderProduct->product ? $orderProduct->product->exactonlineProduct->vat_code_id : null;
+                    //                    $vatCodeId = $orderProduct->product ? $orderProduct->product->exactonlineProduct->vat_code_id : null;
                     $exactonlineProductId = $orderProduct->product->exactonlineProduct->exactonline_id;
                 }
 
@@ -652,22 +652,22 @@ class Exactonline
                 $salesOrderLines[] = $data;
             }
 
-//            if ($order->payment_costs > 0.00) {
-//                $taxTotal = ($order->payment_costs / 121 * 21);
-//
-//                //Receive vat codes from exact
-//                //Check if correct vat code is present
-//                //If not, create it, and link it
-//                $data = [
-//                    'NetPrice' => $order->payment_costs,
-//                    'Item' => null,
-//                    'Description' => 'Betaalmethode kosten',
-//                    'VATAmount' => $taxTotal,
-//                    'VATCode' => 4,
-//                    'Quantity' => $orderProduct->quantity
-//                ];
-//                $salesOrderLines[] = $data;
-//            }
+            //            if ($order->payment_costs > 0.00) {
+            //                $taxTotal = ($order->payment_costs / 121 * 21);
+            //
+            //                //Receive vat codes from exact
+            //                //Check if correct vat code is present
+            //                //If not, create it, and link it
+            //                $data = [
+            //                    'NetPrice' => $order->payment_costs,
+            //                    'Item' => null,
+            //                    'Description' => 'Betaalmethode kosten',
+            //                    'VATAmount' => $taxTotal,
+            //                    'VATCode' => 4,
+            //                    'Quantity' => $orderProduct->quantity
+            //                ];
+            //                $salesOrderLines[] = $data;
+            //            }
 
             $ch = curl_init();
 
@@ -730,31 +730,31 @@ class Exactonline
                     return;
                 }
             }
-//            } catch (Exception $e) {
+            //            } catch (Exception $e) {
             ////                if ($order->exactonlineOrder->pushed != 2) {
-//                $order->exactonlineOrder->pushed = 2;
-//                $order->exactonlineOrder->error = 'Er ging iets mis met pushen naar Exactonline: ' . $e->getMessage();
-//                $order->exactonlineOrder->save();
-//                try {
-//                    $notificationInvoiceEmails = Customsetting::get('notification_invoice_emails', Sites::getActive(), '[]');
-//                    if ($notificationInvoiceEmails) {
-//                        foreach (json_decode($notificationInvoiceEmails) as $notificationInvoiceEmail) {
-//                            Mail::to($notificationInvoiceEmail)->send(new NotificationMail('Order #' . $order->id . ' failed to push to Exactonline', 'Order #' . $order->id . ' failed to push to Exactonline'));
-//                        }
-//                    }
-//                } catch (\Exception $e) {
-//                }
+            //                $order->exactonlineOrder->pushed = 2;
+            //                $order->exactonlineOrder->error = 'Er ging iets mis met pushen naar Exactonline: ' . $e->getMessage();
+            //                $order->exactonlineOrder->save();
+            //                try {
+            //                    $notificationInvoiceEmails = Customsetting::get('notification_invoice_emails', Sites::getActive(), '[]');
+            //                    if ($notificationInvoiceEmails) {
+            //                        foreach (json_decode($notificationInvoiceEmails) as $notificationInvoiceEmail) {
+            //                            Mail::to($notificationInvoiceEmail)->send(new NotificationMail('Order #' . $order->id . ' failed to push to Exactonline', 'Order #' . $order->id . ' failed to push to Exactonline'));
+            //                        }
+            //                    }
+            //                } catch (\Exception $e) {
+            //                }
             ////                }
-//
-//                trigger_error(
-//                    sprintf(
-//                        'Curl failed with error #%d: %s',
-//                        $e->getCode(),
-//                        $e->getMessage()
-//                    ),
-//                    E_USER_ERROR
-//                );
-//            }
+            //
+            //                trigger_error(
+            //                    sprintf(
+            //                        'Curl failed with error #%d: %s',
+            //                        $e->getCode(),
+            //                        $e->getMessage()
+            //                    ),
+            //                    E_USER_ERROR
+            //                );
+            //            }
         }
     }
 
@@ -764,7 +764,7 @@ class Exactonline
             $siteId = Sites::getActive();
         }
 
-//        try {
+        //        try {
         $ch = curl_init();
 
         if ($ch === false) {
@@ -796,16 +796,16 @@ class Exactonline
         $content = json_decode($content, true);
 
         return $content['d']['results'] ?? [];
-//        } catch (Exception $e) {
-//            trigger_error(
-//                sprintf(
-//                    'Curl failed with error #%d: %s',
-//                    $e->getCode(),
-//                    $e->getMessage()
-//                ),
-//                E_USER_ERROR
-//            );
-//        }
+        //        } catch (Exception $e) {
+        //            trigger_error(
+        //                sprintf(
+        //                    'Curl failed with error #%d: %s',
+        //                    $e->getCode(),
+        //                    $e->getMessage()
+        //                ),
+        //                E_USER_ERROR
+        //            );
+        //        }
     }
 
     public static function getVatCodeIdForVateRate($vatRate, $siteId = null)
@@ -821,7 +821,7 @@ class Exactonline
             }
         }
 
-//        try {
+        //        try {
         $ch = curl_init();
 
         if ($ch === false) {
@@ -870,15 +870,15 @@ class Exactonline
         $content = json_decode($content, true);
 
         return $code;
-//        } catch (Exception $e) {
-//            trigger_error(
-//                sprintf(
-//                    'Curl failed with error #%d: %s',
-//                    $e->getCode(),
-//                    $e->getMessage()
-//                ),
-//                E_USER_ERROR
-//            );
-//        }
+        //        } catch (Exception $e) {
+        //            trigger_error(
+        //                sprintf(
+        //                    'Curl failed with error #%d: %s',
+        //                    $e->getCode(),
+        //                    $e->getMessage()
+        //                ),
+        //                E_USER_ERROR
+        //            );
+        //        }
     }
 }
