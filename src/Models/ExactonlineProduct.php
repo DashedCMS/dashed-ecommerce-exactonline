@@ -2,8 +2,8 @@
 
 namespace Dashed\DashedEcommerceExactonline\Models;
 
-use Illuminate\Database\Eloquent\Model;
 use Dashed\DashedEcommerceCore\Models\Product;
+use Illuminate\Database\Eloquent\Model;
 use Spatie\Activitylog\LogOptions;
 use Spatie\Activitylog\Traits\LogsActivity;
 

@@ -2,11 +2,11 @@
 
 namespace Dashed\DashedEcommerceExactonline\Classes;
 
-use Exception;
 use Dashed\DashedCore\Classes\Mails;
 use Dashed\DashedCore\Classes\Sites;
 use Dashed\DashedCore\Models\Customsetting;
 use Dashed\DashedEcommerceCore\Models\Product;
+use Exception;
 
 class Exactonline
 {

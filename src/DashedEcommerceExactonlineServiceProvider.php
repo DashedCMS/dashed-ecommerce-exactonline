@@ -2,9 +2,6 @@
 
 namespace Dashed\DashedEcommerceExactonline;
 
-use Filament\PluginServiceProvider;
-use Illuminate\Console\Scheduling\Schedule;
-use Livewire\Livewire;
 use Dashed\DashedEcommerceCore\Models\Order;
 use Dashed\DashedEcommerceCore\Models\Product;
 use Dashed\DashedEcommerceExactonline\Commands\PushOrdersToExactonlineCommand;
@@ -16,6 +13,9 @@ use Dashed\DashedEcommerceExactonline\Filament\Widgets\ExactonlineOrderStats;
 use Dashed\DashedEcommerceExactonline\Livewire\Orders\ShowExactonlineOrder;
 use Dashed\DashedEcommerceExactonline\Models\ExactonlineOrder;
 use Dashed\DashedEcommerceExactonline\Models\ExactonlineProduct;
+use Filament\PluginServiceProvider;
+use Illuminate\Console\Scheduling\Schedule;
+use Livewire\Livewire;
 use Spatie\LaravelPackageTools\Package;
 
 class DashedEcommerceExactonlineServiceProvider extends PluginServiceProvider
