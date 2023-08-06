@@ -1,12 +1,12 @@
 <?php
 
-namespace Qubiqx\QcommerceEcommerceExactonline\Controllers;
+namespace Dashed\DashedEcommerceExactonline\Controllers;
 
 use Illuminate\Http\Request;
-use Qubiqx\QcommerceCore\Classes\Sites;
-use Qubiqx\QcommerceCore\Controllers\Frontend\FrontendController;
-use Qubiqx\QcommerceEcommerceExactonline\Classes\Exactonline;
-use Qubiqx\QcommerceEcommerceExactonline\Filament\Pages\Settings\ExactonlineSettingsPage;
+use Dashed\DashedCore\Classes\Sites;
+use Dashed\DashedCore\Controllers\Frontend\FrontendController;
+use Dashed\DashedEcommerceExactonline\Classes\Exactonline;
+use Dashed\DashedEcommerceExactonline\Filament\Pages\Settings\ExactonlineSettingsPage;
 
 class ExactonlineController extends FrontendController
 {

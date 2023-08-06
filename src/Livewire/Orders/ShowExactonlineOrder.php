@@ -1,9 +1,9 @@
 <?php
 
-namespace Qubiqx\QcommerceEcommerceExactonline\Livewire\Orders;
+namespace Dashed\DashedEcommerceExactonline\Livewire\Orders;
 
 use Livewire\Component;
-use Qubiqx\QcommerceCore\Models\Customsetting;
+use Dashed\DashedCore\Models\Customsetting;
 
 class ShowExactonlineOrder extends Component
 {
@@ -16,7 +16,7 @@ class ShowExactonlineOrder extends Component
 
     public function render()
     {
-        return view('qcommerce-ecommerce-exactonline::orders.components.show-exactonline-order');
+        return view('dashed-ecommerce-exactonline::orders.components.show-exactonline-order');
     }
 
     public function submit()

@@ -1,9 +1,9 @@
 <?php
 
-namespace Qubiqx\QcommerceEcommerceExactonline\Listeners;
+namespace Dashed\DashedEcommerceExactonline\Listeners;
 
-use Qubiqx\QcommerceCore\Models\Customsetting;
-use Qubiqx\QcommerceEcommerceCore\Events\Orders\InvoiceCreatedEvent;
+use Dashed\DashedCore\Models\Customsetting;
+use Dashed\DashedEcommerceCore\Events\Orders\InvoiceCreatedEvent;
 
 class MarkOrderAsPushableListener
 {

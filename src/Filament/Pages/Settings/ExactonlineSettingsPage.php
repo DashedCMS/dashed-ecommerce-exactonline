@@ -1,6 +1,6 @@
 <?php
 
-namespace Qubiqx\QcommerceEcommerceExactonline\Filament\Pages\Settings;
+namespace Dashed\DashedEcommerceExactonline\Filament\Pages\Settings;
 
 use Filament\Forms\Components\Placeholder;
 use Filament\Forms\Components\Select;
@@ -10,9 +10,9 @@ use Filament\Forms\Components\TextInput;
 use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Forms\Contracts\HasForms;
 use Filament\Pages\Page;
-use Qubiqx\QcommerceCore\Classes\Sites;
-use Qubiqx\QcommerceCore\Models\Customsetting;
-use Qubiqx\QcommerceEcommerceExactonline\Classes\Exactonline;
+use Dashed\DashedCore\Classes\Sites;
+use Dashed\DashedCore\Models\Customsetting;
+use Dashed\DashedEcommerceExactonline\Classes\Exactonline;
 
 class ExactonlineSettingsPage extends Page implements HasForms
 {
@@ -21,7 +21,7 @@ class ExactonlineSettingsPage extends Page implements HasForms
     protected static bool $shouldRegisterNavigation = false;
     protected static ?string $title = 'Exactonline';
 
-    protected static string $view = 'qcommerce-core::settings.pages.default-settings';
+    protected static string $view = 'dashed-core::settings.pages.default-settings';
 
     public function mount(): void
     {
@@ -110,7 +110,7 @@ class ExactonlineSettingsPage extends Page implements HasForms
 //                    ->options(collect(Exactonline::getCustomers($site['id']))->pluck('Name', 'ID'))
 //                    ->visible(fn() => (Customsetting::get('exactonline_connected', $site['id'], 0) ? true : false)),
                 Placeholder::make("")
-                    ->label('Maak de connectie af, bezoek: ' . route('qcommerce.exactonline.authenticate', [$site['id']]))
+                    ->label('Maak de connectie af, bezoek: ' . route('dashed.exactonline.authenticate', [$site['id']]))
                     ->hidden(fn () => (Customsetting::get('exactonline_connected', $site['id'], 0) ? true : false)),
             ];
 

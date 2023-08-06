@@ -1,17 +1,17 @@
 {
-    "name": "qubiqx/qcommerce-ecommerce-exactonline",
-    "description": "This is my package qcommerce-ecommerce-exactonline",
+    "name": "dashed/dashed-ecommerce-exactonline",
+    "description": "This is my package dashed-ecommerce-exactonline",
     "keywords": [
-        "Qubiqx",
+        "Dashed",
         "laravel",
-        "qcommerce-ecommerce-exactonline"
+        "dashed-ecommerce-exactonline"
     ],
-    "homepage": "https://github.com/qubiqx/qcommerce-ecommerce-exactonline",
+    "homepage": "https://github.com/Dashed-DEV/dashed-ecommerce-exactonline",
     "license": "MIT",
     "authors": [
         {
             "name": "Robin van Maasakker",
-            "email": "robin@qubiqx.com",
+            "email": "robin@dashed.nl",
             "role": "Developer"
         }
     ],
@@ -29,13 +29,13 @@
     },
     "autoload": {
         "psr-4": {
-            "Qubiqx\\QcommerceEcommerceExactonline\\": "src",
-            "Qubiqx\\QcommerceEcommerceExactonline\\Database\\Factories\\": "database/factories"
+            "Dashed\\DashedEcommerceExactonline\\": "src",
+            "Dashed\\DashedEcommerceExactonline\\Database\\Factories\\": "database/factories"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "Qubiqx\\QcommerceEcommerceExactonline\\Tests\\": "tests"
+            "Dashed\\DashedEcommerceExactonline\\Tests\\": "tests"
         }
     },
     "scripts": {
@@ -52,11 +52,11 @@
     "extra": {
         "laravel": {
             "providers": [
-                "Qubiqx\\QcommerceEcommerceExactonline\\QcommerceEcommerceExactonlineServiceProvider",
-                "Qubiqx\\QcommerceEcommerceExactonline\\QcommerceEcommerceExactonlineEventServiceProvider"
+                "Dashed\\DashedEcommerceExactonline\\DashedEcommerceExactonlineServiceProvider",
+                "Dashed\\DashedEcommerceExactonline\\DashedEcommerceExactonlineEventServiceProvider"
             ],
             "aliases": {
-                "QcommerceEcommerceExactonline": "Qubiqx\\QcommerceEcommerceExactonline\\Facades\\QcommerceEcommerceExactonline"
+                "DashedEcommerceExactonline": "Dashed\\DashedEcommerceExactonline\\Facades\\DashedEcommerceExactonline"
             }
         }
     },

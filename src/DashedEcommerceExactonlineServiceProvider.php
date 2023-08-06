@@ -1,26 +1,26 @@
 <?php
 
-namespace Qubiqx\QcommerceEcommerceExactonline;
+namespace Dashed\DashedEcommerceExactonline;
 
 use Filament\PluginServiceProvider;
 use Illuminate\Console\Scheduling\Schedule;
 use Livewire\Livewire;
-use Qubiqx\QcommerceEcommerceCore\Models\Order;
-use Qubiqx\QcommerceEcommerceCore\Models\Product;
-use Qubiqx\QcommerceEcommerceExactonline\Commands\PushOrdersToExactonlineCommand;
-use Qubiqx\QcommerceEcommerceExactonline\Commands\PushProductsToExactonlineCommand;
-use Qubiqx\QcommerceEcommerceExactonline\Commands\RefreshExactonlineTokenCommand;
-use Qubiqx\QcommerceEcommerceExactonline\Commands\SyncProductsWithExactonlineCommand;
-use Qubiqx\QcommerceEcommerceExactonline\Filament\Pages\Settings\ExactonlineSettingsPage;
-use Qubiqx\QcommerceEcommerceExactonline\Filament\Widgets\ExactonlineOrderStats;
-use Qubiqx\QcommerceEcommerceExactonline\Livewire\Orders\ShowExactonlineOrder;
-use Qubiqx\QcommerceEcommerceExactonline\Models\ExactonlineOrder;
-use Qubiqx\QcommerceEcommerceExactonline\Models\ExactonlineProduct;
+use Dashed\DashedEcommerceCore\Models\Order;
+use Dashed\DashedEcommerceCore\Models\Product;
+use Dashed\DashedEcommerceExactonline\Commands\PushOrdersToExactonlineCommand;
+use Dashed\DashedEcommerceExactonline\Commands\PushProductsToExactonlineCommand;
+use Dashed\DashedEcommerceExactonline\Commands\RefreshExactonlineTokenCommand;
+use Dashed\DashedEcommerceExactonline\Commands\SyncProductsWithExactonlineCommand;
+use Dashed\DashedEcommerceExactonline\Filament\Pages\Settings\ExactonlineSettingsPage;
+use Dashed\DashedEcommerceExactonline\Filament\Widgets\ExactonlineOrderStats;
+use Dashed\DashedEcommerceExactonline\Livewire\Orders\ShowExactonlineOrder;
+use Dashed\DashedEcommerceExactonline\Models\ExactonlineOrder;
+use Dashed\DashedEcommerceExactonline\Models\ExactonlineProduct;
 use Spatie\LaravelPackageTools\Package;
 
-class QcommerceEcommerceExactonlineServiceProvider extends PluginServiceProvider
+class DashedEcommerceExactonlineServiceProvider extends PluginServiceProvider
 {
-    public static string $name = 'qcommerce-ecommerce-exactonline';
+    public static string $name = 'dashed-ecommerce-exactonline';
 
     public function bootingPackage()
     {
@@ -71,7 +71,7 @@ class QcommerceEcommerceExactonlineServiceProvider extends PluginServiceProvider
         );
 
         $package
-            ->name('qcommerce-ecommerce-exactonline')
+            ->name('dashed-ecommerce-exactonline')
             ->hasViews()
             ->hasRoutes([
                 'exactonlineRoutes',

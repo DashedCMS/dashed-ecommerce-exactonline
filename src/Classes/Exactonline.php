@@ -1,12 +1,12 @@
 <?php
 
-namespace Qubiqx\QcommerceEcommerceExactonline\Classes;
+namespace Dashed\DashedEcommerceExactonline\Classes;
 
 use Exception;
-use Qubiqx\QcommerceCore\Classes\Mails;
-use Qubiqx\QcommerceCore\Classes\Sites;
-use Qubiqx\QcommerceCore\Models\Customsetting;
-use Qubiqx\QcommerceEcommerceCore\Models\Product;
+use Dashed\DashedCore\Classes\Mails;
+use Dashed\DashedCore\Classes\Sites;
+use Dashed\DashedCore\Models\Customsetting;
+use Dashed\DashedEcommerceCore\Models\Product;
 
 class Exactonline
 {
@@ -25,7 +25,7 @@ class Exactonline
             $siteId = Sites::getActive();
         }
 
-        return redirect('https://start.exactonline.nl/api/oauth2/auth?client_id=' . Customsetting::get('exactonline_client_id', $siteId) . '&redirect_uri=' . route('qcommerce.exactonline.save-authentication', $siteId) . '&response_type=code&force_login=0');
+        return redirect('https://start.exactonline.nl/api/oauth2/auth?client_id=' . Customsetting::get('exactonline_client_id', $siteId) . '&redirect_uri=' . route('dashed.exactonline.save-authentication', $siteId) . '&response_type=code&force_login=0');
     }
 
     public static function saveAuthentication($code, $siteId = null)
@@ -50,7 +50,7 @@ class Exactonline
                 CURLOPT_FOLLOWLOCATION => true,
                 CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
                 CURLOPT_CUSTOMREQUEST => "POST",
-                CURLOPT_POSTFIELDS => "code=" . $code . "&redirect_uri=" . route('qcommerce.exactonline.save-authentication', $siteId) . "&grant_type=authorization_code&client_id=" . Customsetting::get('exactonline_client_id', $siteId) . "&client_secret=" . Customsetting::get('exactonline_client_secret', $siteId),
+                CURLOPT_POSTFIELDS => "code=" . $code . "&redirect_uri=" . route('dashed.exactonline.save-authentication', $siteId) . "&grant_type=authorization_code&client_id=" . Customsetting::get('exactonline_client_id', $siteId) . "&client_secret=" . Customsetting::get('exactonline_client_secret', $siteId),
                 CURLOPT_HTTPHEADER => [
                     "Content-Type: application/x-www-form-urlencoded",
                     "Accept: application/json",
@@ -69,9 +69,9 @@ class Exactonline
             Customsetting::set('exactonline_refresh_token', $response['refresh_token'], $siteId);
             Customsetting::set('exactonline_connected', true, $siteId);
             Customsetting::set('exactonline_notified_of_logout', false, $siteId);
-            Mails::sendNotificationToAdmins('Exact is succesvol gekoppeld aan Qcommerce');
+            Mails::sendNotificationToAdmins('Exact is succesvol gekoppeld aan Dashed');
         } catch (Exception $e) {
-            Mails::sendNotificationToAdmins('Exact kon niet gekoppeld worden aan Qcommerce');
+            Mails::sendNotificationToAdmins('Exact kon niet gekoppeld worden aan Dashed');
             Customsetting::set('exactonline_connected', false, $siteId);
             Customsetting::set('exactonline_access_token', null, $siteId);
             Customsetting::set('exactonline_refresh_token', null, $siteId);
@@ -135,7 +135,7 @@ class Exactonline
             Customsetting::set('exactonline_access_token', null, $siteId);
             Customsetting::set('exactonline_refresh_token', null, $siteId);
             if (! Customsetting::get('exactonline_notified_of_logout', $siteId, false)) {
-                Mails::sendNotificationToAdmins('Exact is uitgelogd en moet opnieuw worden gekoppeld in Qcommerce');
+                Mails::sendNotificationToAdmins('Exact is uitgelogd en moet opnieuw worden gekoppeld in Dashed');
                 Customsetting::set('exactonline_notified_of_logout', true, $siteId);
             }
         } else {
@@ -148,7 +148,7 @@ class Exactonline
         //                Customsetting::set('exactonline_connected', false, $siteId);
         //                Customsetting::set('exactonline_access_token', null, $siteId);
         //                Customsetting::set('exactonline_refresh_token', null, $siteId);
-        //                Mails::sendNotificationToAdmins('Exact is uitgelogd en moet opnieuw worden gekoppeld in Qcommerce');
+        //                Mails::sendNotificationToAdmins('Exact is uitgelogd en moet opnieuw worden gekoppeld in Dashed');
         //                trigger_error(
         //                    sprintf(
         //                        'Curl failed with error #%d: %s',
@@ -842,7 +842,7 @@ class Exactonline
             CURLOPT_POSTFIELDS => json_encode([
 //                'Percentage' => $vatRate,
                 'Code' => $code,
-                'Description' => 'Qcommerce',
+                'Description' => 'Dashed',
                 'Type' => 'I',
                 'GLToClaim' => Customsetting::get('exactonline_vat_codes_gl_to_pay', $siteId),
                 'GLToPay' => Customsetting::get('exactonline_vat_codes_gl_to_claim', $siteId),
@@ -853,7 +853,7 @@ class Exactonline
                     ],
                 ],
             ]),
-//            CURLOPT_POSTFIELDS => "code=" . rand(500, 999) . "&Description=Qcommerce&Type=I&VatPercentage=" . $vatRate,
+//            CURLOPT_POSTFIELDS => "code=" . rand(500, 999) . "&Description=Dashed&Type=I&VatPercentage=" . $vatRate,
             CURLOPT_HTTPHEADER => [
                 "Content-Type: application/json",
                 "Accept: application/json",

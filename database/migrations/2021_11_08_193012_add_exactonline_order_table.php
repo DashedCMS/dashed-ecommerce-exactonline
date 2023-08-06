@@ -13,10 +13,10 @@ class AddExactonlineOrderTable extends Migration
      */
     public function up()
     {
-        Schema::create('qcommerce__order_exactonline', function (Blueprint $table) {
+        Schema::create('dashed__order_exactonline', function (Blueprint $table) {
             $table->id();
 
-            $table->foreignId('order_id')->constrained('qcommerce__orders');
+            $table->foreignId('order_id')->constrained('dashed__orders');
             $table->string('exactonline_id')->nullable();
             $table->string('error')->nullable();
             $table->tinyInteger('pushed')->default(0);

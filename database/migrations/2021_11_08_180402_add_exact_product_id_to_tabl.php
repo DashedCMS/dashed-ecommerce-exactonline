@@ -13,10 +13,10 @@ class AddExactProductIdToTabl extends Migration
      */
     public function up()
     {
-        Schema::create('qcommerce__product_exactonline', function (Blueprint $table) {
+        Schema::create('dashed__product_exactonline', function (Blueprint $table) {
             $table->id();
 
-            $table->foreignId('product_id')->constrained('qcommerce__products');
+            $table->foreignId('product_id')->constrained('dashed__products');
             $table->string('exactonline_id')->nullable();
             $table->string('error')->nullable();
 

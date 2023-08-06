@@ -1,10 +1,10 @@
 <?php
 
-namespace Qubiqx\QcommerceEcommerceExactonline\Filament\Widgets;
+namespace Dashed\DashedEcommerceExactonline\Filament\Widgets;
 
 use Filament\Widgets\StatsOverviewWidget;
 use Filament\Widgets\StatsOverviewWidget\Card;
-use Qubiqx\QcommerceEcommerceExactonline\Models\ExactonlineOrder;
+use Dashed\DashedEcommerceExactonline\Models\ExactonlineOrder;
 
 class ExactonlineOrderStats extends StatsOverviewWidget
 {

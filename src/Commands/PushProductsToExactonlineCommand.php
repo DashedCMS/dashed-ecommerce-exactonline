@@ -1,10 +1,10 @@
 <?php
 
-namespace Qubiqx\QcommerceEcommerceExactonline\Commands;
+namespace Dashed\DashedEcommerceExactonline\Commands;
 
 use Illuminate\Console\Command;
-use Qubiqx\QcommerceEcommerceCore\Models\Product;
-use Qubiqx\QcommerceEcommerceExactonline\Classes\Exactonline;
+use Dashed\DashedEcommerceCore\Models\Product;
+use Dashed\DashedEcommerceExactonline\Classes\Exactonline;
 
 class PushProductsToExactonlineCommand extends Command
 {

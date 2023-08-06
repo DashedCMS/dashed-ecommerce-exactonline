@@ -1,9 +1,9 @@
 <?php
 
-namespace Qubiqx\QcommerceEcommerceExactonline\Commands;
+namespace Dashed\DashedEcommerceExactonline\Commands;
 
 use Illuminate\Console\Command;
-use Qubiqx\QcommerceEcommerceExactonline\Classes\Exactonline;
+use Dashed\DashedEcommerceExactonline\Classes\Exactonline;
 
 class RefreshExactonlineTokenCommand extends Command
 {

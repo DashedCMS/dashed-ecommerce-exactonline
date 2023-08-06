@@ -1,5 +1,5 @@
 <?php
 
-use Qubiqx\QcommerceEcommerceExactonline\Tests\TestCase;
+use Dashed\DashedEcommerceExactonline\Tests\TestCase;
 
 uses(TestCase::class)->in(__DIR__);

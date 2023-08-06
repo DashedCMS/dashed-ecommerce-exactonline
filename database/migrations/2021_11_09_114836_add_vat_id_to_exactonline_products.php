@@ -13,7 +13,7 @@ class AddVatIdToExactonlineProducts extends Migration
      */
     public function up()
     {
-        Schema::table('qcommerce__product_exactonline', function (Blueprint $table) {
+        Schema::table('dashed__product_exactonline', function (Blueprint $table) {
             $table->string('vat_code_id')->nullable();
         });
     }
