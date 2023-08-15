@@ -39,7 +39,7 @@ class ExactonlineSettingsPage extends Page implements HasForms
             $formData["exactonline_shipping_costs_product_id_{$site['id']}"] = Customsetting::get('exactonline_shipping_costs_product_id', $site['id']);
             $formData["exactonline_connected_{$site['id']}"] = Customsetting::get('exactonline_connected', $site['id'], 0) ? true : false;
 
-//            dd(count(Exactonline::getGLAccounts($site['id'])),Exactonline::getItems($site['id']),Exactonline::getCustomers($site['id']));
+            //            dd(count(Exactonline::getGLAccounts($site['id'])),Exactonline::getItems($site['id']),Exactonline::getCustomers($site['id']));
         }
 
         $this->form->fill($formData);
@@ -61,7 +61,7 @@ class ExactonlineSettingsPage extends Page implements HasForms
                         'lg' => 2,
                     ]),
                 Placeholder::make('label')
-                    ->label("Exactonline is " . (!Customsetting::get('exactonline_connected', $site['id'], 0) ? 'niet' : '') . ' geconnect')
+                    ->label("Exactonline is " . (! Customsetting::get('exactonline_connected', $site['id'], 0) ? 'niet' : '') . ' geconnect')
                     ->content(Customsetting::get('exactonline_connection_error', $site['id'], ''))
                     ->columnSpan([
                         'default' => 1,
@@ -102,12 +102,12 @@ class ExactonlineSettingsPage extends Page implements HasForms
                         }
                     })
                     ->helperText('Indien er een product gevonden is wordt het volgende veld automatisch ingevuld')
-                    ->visible(fn() => (Customsetting::get('exactonline_connected', $site['id'], 0) ? true : false)),
+                    ->visible(fn () => (Customsetting::get('exactonline_connected', $site['id'], 0) ? true : false)),
                 TextInput::make("exactonline_payment_costs_product_id_{$site['id']}")
                     ->label('Exactonline product om betalingskosten op te boeken')
                     ->required()
                     ->reactive()
-                    ->visible(fn() => (Customsetting::get('exactonline_connected', $site['id'], 0) ? true : false)),
+                    ->visible(fn () => (Customsetting::get('exactonline_connected', $site['id'], 0) ? true : false)),
                 TextInput::make("exactonline_shipping_costs_search_product_id_{$site['id']}")
                     ->label('Zoek product voor verzendkosten')
                     ->reactive()
@@ -118,12 +118,12 @@ class ExactonlineSettingsPage extends Page implements HasForms
                         }
                     })
                     ->helperText('Indien er een product gevonden is wordt het volgende veld automatisch ingevuld')
-                    ->visible(fn() => (Customsetting::get('exactonline_connected', $site['id'], 0) ? true : false)),
+                    ->visible(fn () => (Customsetting::get('exactonline_connected', $site['id'], 0) ? true : false)),
                 TextInput::make("exactonline_shipping_costs_product_id_{$site['id']}")
                     ->label('Exactonline product om verzendkosten op te boeken')
                     ->required()
                     ->reactive()
-                    ->visible(fn() => (Customsetting::get('exactonline_connected', $site['id'], 0) ? true : false)),
+                    ->visible(fn () => (Customsetting::get('exactonline_connected', $site['id'], 0) ? true : false)),
                 TextInput::make("exactonline_search_customer_id_{$site['id']}")
                     ->label('Zoek klant voor alle bestellingen')
                     ->reactive()
@@ -134,15 +134,15 @@ class ExactonlineSettingsPage extends Page implements HasForms
                         }
                     })
                     ->helperText('Indien er een klant gevonden is wordt het volgende veld automatisch ingevuld')
-                    ->visible(fn() => (Customsetting::get('exactonline_connected', $site['id'], 0) ? true : false)),
+                    ->visible(fn () => (Customsetting::get('exactonline_connected', $site['id'], 0) ? true : false)),
                 TextInput::make("exactonline_customer_id_{$site['id']}")
                     ->label('Exactonline customer ID (alle bestellingen worden op deze klant geboekt)')
                     ->required()
                     ->reactive()
-                    ->visible(fn() => (Customsetting::get('exactonline_connected', $site['id'], 0) ? true : false)),
+                    ->visible(fn () => (Customsetting::get('exactonline_connected', $site['id'], 0) ? true : false)),
                 Placeholder::make("")
                     ->label('Maak de connectie af, bezoek: ' . route('dashed.exactonline.authenticate', [$site['id']]))
-                    ->hidden(fn() => (Customsetting::get('exactonline_connected', $site['id'], 0) ? true : false)),
+                    ->hidden(fn () => (Customsetting::get('exactonline_connected', $site['id'], 0) ? true : false)),
             ];
 
             $tabs[] = Tab::make($site['id'])
