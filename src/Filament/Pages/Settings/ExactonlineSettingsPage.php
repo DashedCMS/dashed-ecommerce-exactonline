@@ -2,6 +2,7 @@
 
 namespace Dashed\DashedEcommerceExactonline\Filament\Pages\Settings;
 
+use Closure;
 use Dashed\DashedCore\Classes\Sites;
 use Dashed\DashedCore\Models\Customsetting;
 use Dashed\DashedEcommerceExactonline\Classes\Exactonline;
@@ -37,6 +38,8 @@ class ExactonlineSettingsPage extends Page implements HasForms
             $formData["exactonline_payment_costs_product_id_{$site['id']}"] = Customsetting::get('exactonline_payment_costs_product_id', $site['id']);
             $formData["exactonline_shipping_costs_product_id_{$site['id']}"] = Customsetting::get('exactonline_shipping_costs_product_id', $site['id']);
             $formData["exactonline_connected_{$site['id']}"] = Customsetting::get('exactonline_connected', $site['id'], 0) ? true : false;
+
+//            dd(count(Exactonline::getGLAccounts($site['id'])),Exactonline::getItems($site['id']),Exactonline::getCustomers($site['id']));
         }
 
         $this->form->fill($formData);
@@ -58,7 +61,7 @@ class ExactonlineSettingsPage extends Page implements HasForms
                         'lg' => 2,
                     ]),
                 Placeholder::make('label')
-                    ->label("Exactonline is " . (! Customsetting::get('exactonline_connected', $site['id'], 0) ? 'niet' : '') . ' geconnect')
+                    ->label("Exactonline is " . (!Customsetting::get('exactonline_connected', $site['id'], 0) ? 'niet' : '') . ' geconnect')
                     ->content(Customsetting::get('exactonline_connection_error', $site['id'], ''))
                     ->columnSpan([
                         'default' => 1,
@@ -89,29 +92,57 @@ class ExactonlineSettingsPage extends Page implements HasForms
                     ->required()
                     ->options(collect(Exactonline::getGLAccounts($site['id']))->pluck('Description', 'ID'))
                     ->visible(Customsetting::get('exactonline_connected', $site['id'], 0) ? true : false),
-                Select::make("exactonline_payment_costs_product_id_{$site['id']}")
+                TextInput::make("exactonline_payment_costs_search_product_id_{$site['id']}")
+                    ->label('Zoek product voor betalingskosten')
+                    ->reactive()
+                    ->afterStateUpdated(function ($state, Closure $set) use ($site) {
+                        $response = Exactonline::getItems($site['id'], $state);
+                        if ($response[0] ?? false) {
+                            $set('exactonline_payment_costs_product_id_' . $site['id'], $response[0]['ID']);
+                        }
+                    })
+                    ->helperText('Indien er een product gevonden is wordt het volgende veld automatisch ingevuld')
+                    ->visible(fn() => (Customsetting::get('exactonline_connected', $site['id'], 0) ? true : false)),
+                TextInput::make("exactonline_payment_costs_product_id_{$site['id']}")
                     ->label('Exactonline product om betalingskosten op te boeken')
                     ->required()
-                    ->options(collect(Exactonline::getItems($site['id']))->pluck('Description', 'ID'))
-                    ->visible(fn () => (Customsetting::get('exactonline_connected', $site['id'], 0) ? true : false)),
-                Select::make("exactonline_shipping_costs_product_id_{$site['id']}")
+                    ->reactive()
+                    ->visible(fn() => (Customsetting::get('exactonline_connected', $site['id'], 0) ? true : false)),
+                TextInput::make("exactonline_shipping_costs_search_product_id_{$site['id']}")
+                    ->label('Zoek product voor verzendkosten')
+                    ->reactive()
+                    ->afterStateUpdated(function ($state, Closure $set) use ($site) {
+                        $response = Exactonline::getItems($site['id'], $state);
+                        if ($response[0] ?? false) {
+                            $set('exactonline_shipping_costs_product_id_' . $site['id'], $response[0]['ID']);
+                        }
+                    })
+                    ->helperText('Indien er een product gevonden is wordt het volgende veld automatisch ingevuld')
+                    ->visible(fn() => (Customsetting::get('exactonline_connected', $site['id'], 0) ? true : false)),
+                TextInput::make("exactonline_shipping_costs_product_id_{$site['id']}")
                     ->label('Exactonline product om verzendkosten op te boeken')
                     ->required()
-                    ->options(collect(Exactonline::getItems($site['id']))->pluck('Description', 'ID'))
-                    ->visible(fn () => (Customsetting::get('exactonline_connected', $site['id'], 0) ? true : false)),
-                Select::make("exactonline_customer_id_{$site['id']}")
+                    ->reactive()
+                    ->visible(fn() => (Customsetting::get('exactonline_connected', $site['id'], 0) ? true : false)),
+                TextInput::make("exactonline_search_customer_id_{$site['id']}")
+                    ->label('Zoek klant voor alle bestellingen')
+                    ->reactive()
+                    ->afterStateUpdated(function ($state, Closure $set) use ($site) {
+                        $response = Exactonline::getCustomers($site['id'], $state);
+                        if ($response[0] ?? false) {
+                            $set('exactonline_customer_id_' . $site['id'], $response[0]['ID']);
+                        }
+                    })
+                    ->helperText('Indien er een klant gevonden is wordt het volgende veld automatisch ingevuld')
+                    ->visible(fn() => (Customsetting::get('exactonline_connected', $site['id'], 0) ? true : false)),
+                TextInput::make("exactonline_customer_id_{$site['id']}")
                     ->label('Exactonline customer ID (alle bestellingen worden op deze klant geboekt)')
                     ->required()
-                    ->options(collect(Exactonline::getCustomers($site['id']))->pluck('Name', 'ID'))
-                    ->visible(fn () => (Customsetting::get('exactonline_connected', $site['id'], 0) ? true : false)),
-//                Select::make("exactonline_customer_id_{$site['id']}")
-//                    ->label('Exactonline customer ID (alle bestellingen worden op deze klant geboekt)')
-//                    ->required()
-//                    ->options(collect(Exactonline::getCustomers($site['id']))->pluck('Name', 'ID'))
-//                    ->visible(fn() => (Customsetting::get('exactonline_connected', $site['id'], 0) ? true : false)),
+                    ->reactive()
+                    ->visible(fn() => (Customsetting::get('exactonline_connected', $site['id'], 0) ? true : false)),
                 Placeholder::make("")
                     ->label('Maak de connectie af, bezoek: ' . route('dashed.exactonline.authenticate', [$site['id']]))
-                    ->hidden(fn () => (Customsetting::get('exactonline_connected', $site['id'], 0) ? true : false)),
+                    ->hidden(fn() => (Customsetting::get('exactonline_connected', $site['id'], 0) ? true : false)),
             ];
 
             $tabs[] = Tab::make($site['id'])

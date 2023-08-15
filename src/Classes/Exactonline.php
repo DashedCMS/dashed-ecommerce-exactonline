@@ -7,12 +7,13 @@ use Dashed\DashedCore\Classes\Sites;
 use Dashed\DashedCore\Models\Customsetting;
 use Dashed\DashedEcommerceCore\Models\Product;
 use Exception;
+use Illuminate\Support\Facades\Http;
 
 class Exactonline
 {
     public static function isConnected($siteId = null)
     {
-        if (! $siteId) {
+        if (!$siteId) {
             $siteId = Sites::getActive();
         }
 
@@ -21,7 +22,7 @@ class Exactonline
 
     public static function authenticate($siteId = null)
     {
-        if (! $siteId) {
+        if (!$siteId) {
             $siteId = Sites::getActive();
         }
 
@@ -30,7 +31,7 @@ class Exactonline
 
     public static function saveAuthentication($code, $siteId = null)
     {
-        if (! $siteId) {
+        if (!$siteId) {
             $siteId = Sites::getActive();
         }
 
@@ -89,7 +90,7 @@ class Exactonline
 
     public static function refreshToken($siteId = null)
     {
-        if (! $siteId) {
+        if (!$siteId) {
             $siteId = Sites::getActive();
         }
 
@@ -125,7 +126,7 @@ class Exactonline
         curl_close($ch);
         $response = json_decode($content, true);
 
-        if (! isset($response['access_token'])) {
+        if (!isset($response['access_token'])) {
             if (isset($response['error_description']) && $response['error_description'] == 'Rate limit exceeded: access_token not expired') {
                 dump('rate limit, do nothing');
 
@@ -134,7 +135,7 @@ class Exactonline
             Customsetting::set('exactonline_connected', false, $siteId);
             Customsetting::set('exactonline_access_token', null, $siteId);
             Customsetting::set('exactonline_refresh_token', null, $siteId);
-            if (! Customsetting::get('exactonline_notified_of_logout', $siteId, false)) {
+            if (!Customsetting::get('exactonline_notified_of_logout', $siteId, false)) {
                 Mails::sendNotificationToAdmins('Exact is uitgelogd en moet opnieuw worden gekoppeld in Dashed');
                 Customsetting::set('exactonline_notified_of_logout', true, $siteId);
             }
@@ -163,7 +164,7 @@ class Exactonline
 
     public static function getDivision($siteId = null)
     {
-        if (! $siteId) {
+        if (!$siteId) {
             $siteId = Sites::getActive();
         }
 
@@ -197,7 +198,6 @@ class Exactonline
             }
             curl_close($ch);
             $content = json_decode($content, true);
-            dd($content);
             $division = $content['d']['results'][0]['CurrentDivision'];
             Customsetting::set('exactonline_division', $division, $siteId);
 
@@ -216,11 +216,11 @@ class Exactonline
 
     public static function pushProduct(Product $product, $siteId = null)
     {
-        if (! $siteId) {
+        if (!$siteId) {
             $siteId = Sites::getActive();
         }
 
-        if (! self::isConnected($siteId) || ($product->exactonlineProduct && $product->exactonlineProduct->exactonline_id)) {
+        if (!self::isConnected($siteId) || ($product->exactonlineProduct && $product->exactonlineProduct->exactonline_id)) {
             return;
         }
 
@@ -265,11 +265,11 @@ class Exactonline
         $content = json_decode($content, true);
 
         $exactonlineProduct = $product->exactonlineProduct;
-        if (! $exactonlineProduct) {
+        if (!$exactonlineProduct) {
             $exactonlineProduct = $product->exactonlineProduct()->create();
         }
 
-        if (! isset($content['d'])) {
+        if (!isset($content['d'])) {
             $exactonlineProduct->error = $content['error']['message']['value'] ?? 'Er is iets fout gegaan';
             $exactonlineProduct->save();
 
@@ -295,11 +295,11 @@ class Exactonline
 
     public static function syncProduct(Product $product, $siteId = null)
     {
-        if (! $siteId) {
+        if (!$siteId) {
             $siteId = Sites::getActive();
         }
 
-        if (! $product->exactonlineProduct || ! $product->exactonlineProduct->exactonline_id) {
+        if (!$product->exactonlineProduct || !$product->exactonlineProduct->exactonline_id) {
             return;
         }
 
@@ -358,43 +358,63 @@ class Exactonline
         //        }
     }
 
-    public static function getCustomers($siteId = null)
+    public static function getCustomers($siteId = null, ?string $search)
     {
-        if (! $siteId) {
+        if (!$search) {
+            return;
+        }
+
+        if (!$siteId) {
             $siteId = Sites::getActive();
         }
 
         //        try {
-        $ch = curl_init();
+//        $ch = curl_init();
+//
+//        if ($ch === false) {
+//            throw new Exception('failed to initialize');
+//        }
 
-        if ($ch === false) {
-            throw new Exception('failed to initialize');
-        }
+        return Http::withHeaders([
+            "Content-Type" => "application/json",
+            "Accept" => "application/json",
+        ])
+            ->withToken(Customsetting::get('exactonline_access_token', $siteId))
+            ->get('https://start.exactonline.nl/api/v1/' . Customsetting::get('exactonline_division', $siteId) . '/crm/Accounts?$select=ID,Accountant,AccountManager,AccountManagerFullName,CreatorFullName,Email,Name&$filter=Name eq \'' . $search . '\'')
+            ->json()['d']['results'] ?? [];
+//        dump($response->body(), $response->status());
 
-        curl_setopt_array($ch, [
-            CURLOPT_URL => 'https://start.exactonline.nl/api/v1/' . Customsetting::get('exactonline_division', $siteId) . '/crm/Accounts?$select=ID,Accountant,AccountManager,AccountManagerFullName,CreatorFullName,Email,Name',
-            CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_ENCODING => "",
-            CURLOPT_MAXREDIRS => 10,
-            CURLOPT_TIMEOUT => 0,
-            CURLOPT_FOLLOWLOCATION => true,
-            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-            CURLOPT_CUSTOMREQUEST => "GET",
-            CURLOPT_HTTPHEADER => [
-                "Content-Type: application/json",
-                "Accept: application/json",
-                "Authorization: Bearer " . Customsetting::get('exactonline_access_token', $siteId),
-            ],
-        ]);
+//        curl_setopt_array($ch, [
+//            CURLOPT_URL => 'https://start.exactonline.nl/api/v1/' . Customsetting::get('exactonline_division', $siteId) . '/crm/Accounts?$select=ID,Accountant,AccountManager,AccountManagerFullName,CreatorFullName,Email,Name&$filter=Name eq \'Scooperz\'',
+//            CURLOPT_RETURNTRANSFER => true,
+//            CURLOPT_ENCODING => "",
+//            CURLOPT_MAXREDIRS => 10,
+//            CURLOPT_TIMEOUT => 0,
+//            CURLOPT_FOLLOWLOCATION => true,
+//            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+//            CURLOPT_CUSTOMREQUEST => "GET",
+//            CURLOPT_HTTPHEADER => [
+//                "Content-Type: application/json",
+//                "Accept: application/json",
+//                "Authorization: Bearer " . Customsetting::get('exactonline_access_token', $siteId),
+//            ],
+//        ]);
+//
+//        $content = curl_exec($ch);
+//
+//        if ($content === false) {
+//            throw new Exception(curl_error($ch), curl_errno($ch));
+//        }
+//        curl_close($ch);
+//
+//        curl_getinfo($ch);
+//        curl_errno($ch);
+//        $content = curl_exec($ch);
+//        $content = json_decode($content, true);
+//        dd($content);
 
-        $content = curl_exec($ch);
-
-        if ($content === false) {
-            throw new Exception(curl_error($ch), curl_errno($ch));
-        }
-        curl_close($ch);
-        $content = json_decode($content, true);
-
+//        dump($response);
+        return $response['d']['results'] ?? [];
         return $content['d']['results'] ?? [];
         //        } catch (Exception $e) {
         //            trigger_error(
@@ -410,7 +430,7 @@ class Exactonline
 
     public static function getGLAccounts($siteId = null)
     {
-        if (! $siteId) {
+        if (!$siteId) {
             $siteId = Sites::getActive();
         }
 
@@ -438,7 +458,7 @@ class Exactonline
         ]);
 
         $content = curl_exec($ch);
-        //        dd(Customsetting::get('exactonline_division', $siteId), Customsetting::get('exactonline_access_token', $siteId), $content);
+//                dd(Customsetting::get('exactonline_division', $siteId), Customsetting::get('exactonline_access_token', $siteId), $content);
 
         if ($content === false) {
             throw new Exception(curl_error($ch), curl_errno($ch));
@@ -495,80 +515,94 @@ class Exactonline
         //        }
     }
 
-    public static function getItems($siteId = null)
+    public static function getItems($siteId = null, ?string $search): array
     {
-        if (! $siteId) {
+        if (!$search) {
+            return [];
+        }
+
+        if (!$siteId) {
             $siteId = Sites::getActive();
         }
 
+        return Http::withHeaders([
+            "Content-Type" => "application/json",
+            "Accept" => "application/json",
+        ])
+            ->withToken(Customsetting::get('exactonline_access_token', $siteId))
+            ->get('https://start.exactonline.nl/api/v1/' . Customsetting::get('exactonline_division', $siteId) . '/logistics/Items?$select=ID,Code,Description&$filter=Code eq \'' . $search . '\'')
+            ->json()['d']['results'] ?? [];
+//        dd($response->json(), $response->status());
+
         //        try {
-        $ch = curl_init();
-
-        if ($ch === false) {
-            throw new Exception('failed to initialize');
-        }
-
-        curl_setopt_array($ch, [
-            CURLOPT_URL => 'https://start.exactonline.nl/api/v1/' . Customsetting::get('exactonline_division', $siteId) . '/logistics/Items?$select=ID,Code,Description',
-            CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_ENCODING => "",
-            CURLOPT_MAXREDIRS => 10,
-            CURLOPT_TIMEOUT => 0,
-            CURLOPT_FOLLOWLOCATION => true,
-            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-            CURLOPT_CUSTOMREQUEST => "GET",
-            CURLOPT_HTTPHEADER => [
-                "Content-Type: application/json",
-                "Accept: application/json",
-                "Authorization: Bearer " . Customsetting::get('exactonline_access_token', $siteId),
-            ],
-        ]);
-
-        $content = curl_exec($ch);
-
-        if ($content === false) {
-            throw new Exception(curl_error($ch), curl_errno($ch));
-        }
-        curl_close($ch);
-        $content = json_decode($content, true);
-
-        $results = $content['d']['results'] ?? [];
-        $nextUrl = $content['d']['__next'] ?? '';
-        while ($nextUrl) {
-            $ch = curl_init();
-
-            if ($ch === false) {
-                throw new Exception('failed to initialize');
-            }
-
-            curl_setopt_array($ch, [
-                CURLOPT_URL => $nextUrl,
-                CURLOPT_RETURNTRANSFER => true,
-                CURLOPT_ENCODING => "",
-                CURLOPT_MAXREDIRS => 10,
-                CURLOPT_TIMEOUT => 0,
-                CURLOPT_FOLLOWLOCATION => true,
-                CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-                CURLOPT_CUSTOMREQUEST => "GET",
-                CURLOPT_HTTPHEADER => [
-                    "Content-Type: application/json",
-                    "Accept: application/json",
-                    "Authorization: Bearer " . Customsetting::get('exactonline_access_token', $siteId),
-                ],
-            ]);
-
-            $content = curl_exec($ch);
-
-            if ($content === false) {
-                throw new Exception(curl_error($ch), curl_errno($ch));
-            }
-            curl_close($ch);
-            $content = json_decode($content, true);
-            $results = array_merge($results, $content['d']['results']);
-            $nextUrl = $content['d']['__next'] ?? '';
-        }
-
-        return $results;
+//        $ch = curl_init();
+//
+//        if ($ch === false) {
+//            throw new Exception('failed to initialize');
+//        }
+//
+//        curl_setopt_array($ch, [
+////            CURLOPT_URL => 'https://start.exactonline.nl/api/v1/' . Customsetting::get('exactonline_division', $siteId) . '/financial/GLAccounts?$select=ID,Code,Description',
+//            CURLOPT_URL => 'https://start.exactonline.nl/api/v1/' . Customsetting::get('exactonline_division', $siteId) . '/logistics/Items?$select=ID,Code,Description',
+//            CURLOPT_RETURNTRANSFER => true,
+//            CURLOPT_ENCODING => "",
+//            CURLOPT_MAXREDIRS => 10,
+//            CURLOPT_TIMEOUT => 0,
+//            CURLOPT_FOLLOWLOCATION => true,
+//            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+//            CURLOPT_CUSTOMREQUEST => "GET",
+//            CURLOPT_HTTPHEADER => [
+//                "Content-Type: application/json",
+//                "Accept: application/json",
+//                "Authorization: Bearer " . Customsetting::get('exactonline_access_token', $siteId),
+//            ],
+//        ]);
+//
+//        $content = curl_exec($ch);
+//
+//        if ($content === false) {
+//            throw new Exception(curl_error($ch), curl_errno($ch));
+//        }
+//        curl_close($ch);
+//        $content = json_decode($content, true);
+//
+//        $results = $content['d']['results'] ?? [];
+//        $nextUrl = $content['d']['__next'] ?? '';
+//        while ($nextUrl) {
+//            $ch = curl_init();
+//
+//            if ($ch === false) {
+//                throw new Exception('failed to initialize');
+//            }
+//
+//            curl_setopt_array($ch, [
+//                CURLOPT_URL => $nextUrl,
+//                CURLOPT_RETURNTRANSFER => true,
+//                CURLOPT_ENCODING => "",
+//                CURLOPT_MAXREDIRS => 10,
+//                CURLOPT_TIMEOUT => 0,
+//                CURLOPT_FOLLOWLOCATION => true,
+//                CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+//                CURLOPT_CUSTOMREQUEST => "GET",
+//                CURLOPT_HTTPHEADER => [
+//                    "Content-Type: application/json",
+//                    "Accept: application/json",
+//                    "Authorization: Bearer " . Customsetting::get('exactonline_access_token', $siteId),
+//                ],
+//            ]);
+//
+//            $content = curl_exec($ch);
+//
+//            if ($content === false) {
+//                throw new Exception(curl_error($ch), curl_errno($ch));
+//            }
+//            curl_close($ch);
+//            $content = json_decode($content, true);
+//            $results = array_merge($results, $content['d']['results']);
+//            $nextUrl = $content['d']['__next'] ?? '';
+//        }
+//
+//        return $results;
         //        } catch (Exception $e) {
         //            trigger_error(
         //                sprintf(
@@ -583,7 +617,7 @@ class Exactonline
 
     public static function pushOrder($order)
     {
-        if (! self::isConnected($order->site_short) || ! $order->exactonlineOrder || $order->exactonlineOrder->pushed == 1) {
+        if (!self::isConnected($order->site_short) || !$order->exactonlineOrder || $order->exactonlineOrder->pushed == 1) {
             return;
         }
 
@@ -616,7 +650,7 @@ class Exactonline
 
                 if ($orderProduct->sku == 'payment_costs') {
                     $exactonlineProductId = Customsetting::get('exactonline_payment_costs_product_id', $order->site_short);
-                    if (! $exactonlineProductId) {
+                    if (!$exactonlineProductId) {
                         $order->exactonlineOrder->pushed = 2;
                         $order->exactonlineOrder->error = 'Betaalmethode kosten zit nog niet aan een product in Exactonline gekoppeld';
                         $order->exactonlineOrder->save();
@@ -626,7 +660,7 @@ class Exactonline
                     }
                 } elseif ($orderProduct->sku == 'shipping_costs') {
                     $exactonlineProductId = Customsetting::get('exactonline_shipping_costs_product_id', $order->site_short);
-                    if (! $exactonlineProductId) {
+                    if (!$exactonlineProductId) {
                         $order->exactonlineOrder->pushed = 2;
                         $order->exactonlineOrder->error = 'Verzend kosten zit nog niet aan een product in Exactonline gekoppeld';
                         $order->exactonlineOrder->save();
@@ -636,7 +670,7 @@ class Exactonline
                     }
                 }
 
-                if (! $vatCodeId) {
+                if (!$vatCodeId) {
                     $vatCodeId = self::getVatCodeIdForVateRate($vatRate, $order->site_short);
                 }
 
@@ -760,7 +794,7 @@ class Exactonline
 
     public static function getVatCodes($siteId = null)
     {
-        if (! $siteId) {
+        if (!$siteId) {
             $siteId = Sites::getActive();
         }
 
@@ -810,7 +844,7 @@ class Exactonline
 
     public static function getVatCodeIdForVateRate($vatRate, $siteId = null)
     {
-        if (! $siteId) {
+        if (!$siteId) {
             $siteId = Sites::getActive();
         }
 
