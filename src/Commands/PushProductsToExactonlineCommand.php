@@ -2,9 +2,9 @@
 
 namespace Dashed\DashedEcommerceExactonline\Commands;
 
+use Illuminate\Console\Command;
 use Dashed\DashedEcommerceCore\Models\Product;
 use Dashed\DashedEcommerceExactonline\Classes\Exactonline;
-use Illuminate\Console\Command;
 
 class PushProductsToExactonlineCommand extends Command
 {

@@ -2,8 +2,8 @@
 
 namespace Dashed\DashedEcommerceExactonline\Livewire\Orders;
 
-use Dashed\DashedCore\Models\Customsetting;
 use Livewire\Component;
+use Dashed\DashedCore\Models\Customsetting;
 
 class ShowExactonlineOrder extends Component
 {
@@ -22,17 +22,17 @@ class ShowExactonlineOrder extends Component
     public function submit()
     {
         if (! $this->order->exactonlineOrder) {
-            $this->emit('notify', [
+            $this->dispatch('notify', [
                 'status' => 'error',
                 'message' => 'De bestelling mag niet naar Exactonline gepushed worden.',
             ]);
         } elseif ($this->order->exactonlineOrder->pushed == 1) {
-            $this->emit('notify', [
+            $this->dispatch('notify', [
                 'status' => 'error',
                 'message' => 'De bestelling is al naar Exactonline gepushed.',
             ]);
         } elseif ($this->order->exactonlineOrder->pushed == 0) {
-            $this->emit('notify', [
+            $this->dispatch('notify', [
                 'status' => 'error',
                 'message' => 'De bestelling wordt al naar Exactonline gepushed.',
             ]);
@@ -41,8 +41,8 @@ class ShowExactonlineOrder extends Component
         $this->order->exactonlineOrder->pushed = 0;
         $this->order->exactonlineOrder->save();
 
-        $this->emit('refreshPage');
-        $this->emit('notify', [
+        $this->dispatch('refreshPage');
+        $this->dispatch('notify', [
             'status' => 'success',
             'message' => 'De bestelling wordt binnen enkele minuten opnieuw naar Exactonline gepushed.',
         ]);
@@ -54,8 +54,8 @@ class ShowExactonlineOrder extends Component
             $this->order->exactonlineOrder()->create([]);
         }
 
-        $this->emit('refreshPage');
-        $this->emit('notify', [
+        $this->dispatch('refreshPage');
+        $this->dispatch('notify', [
             'status' => 'success',
             'message' => 'De bestelling wordt binnen enkele minuten naar Exactonline gepushed.',
         ]);

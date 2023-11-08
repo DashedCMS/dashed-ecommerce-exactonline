@@ -3,26 +3,24 @@
 namespace Dashed\DashedEcommerceExactonline\Filament\Pages\Settings;
 
 use Closure;
-use Dashed\DashedCore\Classes\Sites;
-use Dashed\DashedCore\Models\Customsetting;
-use Dashed\DashedEcommerceExactonline\Classes\Exactonline;
-use Filament\Forms\Components\Placeholder;
-use Filament\Forms\Components\Select;
+use Filament\Pages\Page;
 use Filament\Forms\Components\Tabs;
+use Dashed\DashedCore\Classes\Sites;
+use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Tabs\Tab;
 use Filament\Forms\Components\TextInput;
-use Filament\Forms\Concerns\InteractsWithForms;
-use Filament\Forms\Contracts\HasForms;
-use Filament\Pages\Page;
+use Filament\Notifications\Notification;
+use Filament\Forms\Components\Placeholder;
+use Dashed\DashedCore\Models\Customsetting;
+use Dashed\DashedEcommerceExactonline\Classes\Exactonline;
 
-class ExactonlineSettingsPage extends Page implements HasForms
+class ExactonlineSettingsPage extends Page
 {
-    use InteractsWithForms;
-
     protected static bool $shouldRegisterNavigation = false;
     protected static ?string $title = 'Exactonline';
 
     protected static string $view = 'dashed-core::settings.pages.default-settings';
+    public array $data = [];
 
     public function mount(): void
     {
@@ -69,19 +67,13 @@ class ExactonlineSettingsPage extends Page implements HasForms
                     ]),
                 TextInput::make("exactonline_client_id_{$site['id']}")
                     ->label('Exactonline client ID')
-                    ->rules([
-                        'max:255',
-                    ]),
+                    ->maxLength(255),
                 TextInput::make("exactonline_client_secret_{$site['id']}")
                     ->label('Exactonline client secret')
-                    ->rules([
-                        'max:255',
-                    ]),
+                    ->maxLength(255),
                 TextInput::make("exactonline_division_{$site['id']}")
                     ->label('Exactonline division')
-                    ->rules([
-                        'max:255',
-                    ]),
+                    ->maxLength(255),
                 Select::make("exactonline_vat_codes_gl_to_pay_{$site['id']}")
                     ->label('Exactonline VAT rate GL rekening ID (to pay)')
                     ->required()
@@ -159,6 +151,11 @@ class ExactonlineSettingsPage extends Page implements HasForms
         return $tabGroups;
     }
 
+    public function getFormStatePath(): ?string
+    {
+        return 'data';
+    }
+
     public function submit()
     {
         $sites = Sites::getSites();
@@ -178,7 +175,10 @@ class ExactonlineSettingsPage extends Page implements HasForms
             }
         }
 
-        $this->notify('success', 'De Exactonline instellingen zijn opgeslagen');
+        Notification::make()
+            ->title('De Exactonline instellingen zijn opgeslagen')
+            ->success()
+            ->send();
 
         return redirect(ExactonlineSettingsPage::getUrl());
     }

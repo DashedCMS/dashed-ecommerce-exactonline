@@ -2,23 +2,22 @@
 
 namespace Dashed\DashedEcommerceExactonline;
 
-use Dashed\DashedEcommerceCore\Models\Order;
-use Dashed\DashedEcommerceCore\Models\Product;
-use Dashed\DashedEcommerceExactonline\Commands\PushOrdersToExactonlineCommand;
-use Dashed\DashedEcommerceExactonline\Commands\PushProductsToExactonlineCommand;
-use Dashed\DashedEcommerceExactonline\Commands\RefreshExactonlineTokenCommand;
-use Dashed\DashedEcommerceExactonline\Commands\SyncProductsWithExactonlineCommand;
-use Dashed\DashedEcommerceExactonline\Filament\Pages\Settings\ExactonlineSettingsPage;
-use Dashed\DashedEcommerceExactonline\Filament\Widgets\ExactonlineOrderStats;
-use Dashed\DashedEcommerceExactonline\Livewire\Orders\ShowExactonlineOrder;
-use Dashed\DashedEcommerceExactonline\Models\ExactonlineOrder;
-use Dashed\DashedEcommerceExactonline\Models\ExactonlineProduct;
-use Filament\PluginServiceProvider;
-use Illuminate\Console\Scheduling\Schedule;
 use Livewire\Livewire;
 use Spatie\LaravelPackageTools\Package;
+use Illuminate\Console\Scheduling\Schedule;
+use Dashed\DashedEcommerceCore\Models\Order;
+use Dashed\DashedEcommerceCore\Models\Product;
+use Spatie\LaravelPackageTools\PackageServiceProvider;
+use Dashed\DashedEcommerceExactonline\Models\ExactonlineOrder;
+use Dashed\DashedEcommerceExactonline\Models\ExactonlineProduct;
+use Dashed\DashedEcommerceExactonline\Livewire\Orders\ShowExactonlineOrder;
+use Dashed\DashedEcommerceExactonline\Commands\PushOrdersToExactonlineCommand;
+use Dashed\DashedEcommerceExactonline\Commands\RefreshExactonlineTokenCommand;
+use Dashed\DashedEcommerceExactonline\Commands\PushProductsToExactonlineCommand;
+use Dashed\DashedEcommerceExactonline\Commands\SyncProductsWithExactonlineCommand;
+use Dashed\DashedEcommerceExactonline\Filament\Pages\Settings\ExactonlineSettingsPage;
 
-class DashedEcommerceExactonlineServiceProvider extends PluginServiceProvider
+class DashedEcommerceExactonlineServiceProvider extends PackageServiceProvider
 {
     public static string $name = 'dashed-ecommerce-exactonline';
 
@@ -54,7 +53,7 @@ class DashedEcommerceExactonlineServiceProvider extends PluginServiceProvider
                 'exactonline' => [
                     'name' => 'Exactonline',
                     'description' => 'Koppel Exactonline',
-                    'icon' => 'archive',
+                    'icon' => 'archive-box',
                     'page' => ExactonlineSettingsPage::class,
                 ],
             ])
@@ -82,19 +81,5 @@ class DashedEcommerceExactonlineServiceProvider extends PluginServiceProvider
                 SyncProductsWithExactonlineCommand::class,
                 PushOrdersToExactonlineCommand::class,
             ]);
-    }
-
-    protected function getPages(): array
-    {
-        return array_merge(parent::getPages(), [
-            ExactonlineSettingsPage::class,
-        ]);
-    }
-
-    protected function getWidgets(): array
-    {
-        return array_merge(parent::getWidgets(), [
-            ExactonlineOrderStats::class,
-        ]);
     }
 }
