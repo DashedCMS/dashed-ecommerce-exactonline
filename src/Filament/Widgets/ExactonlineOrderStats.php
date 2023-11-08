@@ -2,8 +2,8 @@
 
 namespace Dashed\DashedEcommerceExactonline\Filament\Widgets;
 
-use Filament\Widgets\StatsOverviewWidget;
 use Dashed\DashedEcommerceExactonline\Models\ExactonlineOrder;
+use Filament\Widgets\StatsOverviewWidget;
 
 class ExactonlineOrderStats extends StatsOverviewWidget
 {
