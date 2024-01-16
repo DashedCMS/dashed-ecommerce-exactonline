@@ -2,9 +2,9 @@
 
 namespace Dashed\DashedEcommerceExactonline\Commands;
 
-use Illuminate\Console\Command;
 use Dashed\DashedEcommerceCore\Models\Product;
 use Dashed\DashedEcommerceExactonline\Classes\Exactonline;
+use Illuminate\Console\Command;
 
 class PushProductsToExactonlineCommand extends Command
 {
@@ -45,7 +45,7 @@ class PushProductsToExactonlineCommand extends Command
                 $this->info('Pushing product ' . $product->name);
                 Exactonline::pushProduct($product);
             }
-        }else{
+        } else {
             $this->error('Exactonline is not connected, please connect first');
         }
     }
