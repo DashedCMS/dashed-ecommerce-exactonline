@@ -2,10 +2,10 @@
 
 namespace Dashed\DashedEcommerceExactonline;
 
-use Dashed\DashedEcommerceExactonline\Filament\Pages\Settings\ExactonlineSettingsPage;
-use Dashed\DashedEcommerceExactonline\Filament\Widgets\ExactonlineOrderStats;
-use Filament\Contracts\Plugin;
 use Filament\Panel;
+use Filament\Contracts\Plugin;
+use Dashed\DashedEcommerceExactonline\Filament\Widgets\ExactonlineOrderStats;
+use Dashed\DashedEcommerceExactonline\Filament\Pages\Settings\ExactonlineSettingsPage;
 
 class DashedEcommerceExactonlinePlugin implements Plugin
 {

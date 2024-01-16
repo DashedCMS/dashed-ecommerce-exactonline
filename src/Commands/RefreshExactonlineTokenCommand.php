@@ -2,8 +2,8 @@
 
 namespace Dashed\DashedEcommerceExactonline\Commands;
 
-use Dashed\DashedEcommerceExactonline\Classes\Exactonline;
 use Illuminate\Console\Command;
+use Dashed\DashedEcommerceExactonline\Classes\Exactonline;
 
 class RefreshExactonlineTokenCommand extends Command
 {

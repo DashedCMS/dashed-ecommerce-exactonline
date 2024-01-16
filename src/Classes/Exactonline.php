@@ -2,12 +2,12 @@
 
 namespace Dashed\DashedEcommerceExactonline\Classes;
 
+use Exception;
 use Dashed\DashedCore\Classes\Mails;
 use Dashed\DashedCore\Classes\Sites;
+use Illuminate\Support\Facades\Http;
 use Dashed\DashedCore\Models\Customsetting;
 use Dashed\DashedEcommerceCore\Models\Product;
-use Exception;
-use Illuminate\Support\Facades\Http;
 
 class Exactonline
 {
@@ -620,6 +620,12 @@ class Exactonline
     {
         if (! self::isConnected($order->site_short) || ! $order->exactonlineOrder || $order->exactonlineOrder->pushed == 1) {
             return;
+        }
+
+        foreach($order->orderProducts as $orderProduct){
+            if ($orderProduct->product && !$orderProduct->product->exactonlineProduct) {
+                throw new Exception('Product ' . $orderProduct->product->name . ' is not pushed to Exactonline yet');
+            }
         }
 
         $exactCustomerId = Customsetting::get('exactonline_customer_id', $order->site_short);

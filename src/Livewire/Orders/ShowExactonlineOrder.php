@@ -2,8 +2,8 @@
 
 namespace Dashed\DashedEcommerceExactonline\Livewire\Orders;
 
-use Dashed\DashedCore\Models\Customsetting;
 use Livewire\Component;
+use Dashed\DashedCore\Models\Customsetting;
 
 class ShowExactonlineOrder extends Component
 {
