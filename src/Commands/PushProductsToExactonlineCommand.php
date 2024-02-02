@@ -41,7 +41,7 @@ class PushProductsToExactonlineCommand extends Command
     {
         if (Exactonline::isConnected()) {
             $this->info('Exactonline is connected, pushing products');
-            foreach (Product::isNotBundle()->get() as $product) {
+            foreach (Product::isNotBundle()->limit(100)->get() as $product) {
                 $this->info('Pushing product ' . $product->name);
                 Exactonline::pushProduct($product);
             }
