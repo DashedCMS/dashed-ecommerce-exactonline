@@ -581,7 +581,10 @@ class Exactonline
     public static function pushOrder($order)
     {
         if (! self::isConnected($order->site_short) || ! $order->exactonlineOrder || $order->exactonlineOrder->pushed == 1) {
-            return;
+            return [
+                'success' => false,
+                'error' => 'Exactonline is not connected or order is already pushed',
+            ];
         }
 
         foreach ($order->orderProducts as $orderProduct) {
@@ -629,7 +632,10 @@ class Exactonline
                         $order->exactonlineOrder->save();
                         Mails::sendNotificationToAdmins('Order #' . $order->id . ' failed to push to Exactonline');
 
-                        return;
+                        return [
+                            'success' => false,
+                            'error' => 'Payment costs not linked to product in Exactonline',
+                        ];
                     }
                 } elseif ($orderProduct->sku == 'shipping_costs') {
                     $exactonlineProductId = Customsetting::get('exactonline_shipping_costs_product_id', $order->site_short);
@@ -639,7 +645,10 @@ class Exactonline
                         $order->exactonlineOrder->save();
                         Mails::sendNotificationToAdmins('Order #' . $order->id . ' failed to push to Exactonline');
 
-                        return;
+                        return [
+                            'success' => false,
+                            'error' => 'Shipping costs not linked to product in Exactonline',
+                        ];
                     }
                 }
 
@@ -726,7 +735,11 @@ class Exactonline
                 $order->exactonlineOrder->exactonline_id = $id;
                 $order->exactonlineOrder->save();
 
-                return $content['d'];
+                return [
+                    'success' => true,
+                    'order' => $content['d'],
+                    'orderId' => $id,
+                ];
             } else {
                 if ($order->exactonlineOrder->pushed != 2) {
                     $order->exactonlineOrder->pushed = 2;
@@ -734,7 +747,10 @@ class Exactonline
                     $order->exactonlineOrder->save();
                     Mails::sendNotificationToAdmins('Order #' . $order->id . ' failed to push to Exactonline');
 
-                    return;
+                    return [
+                        'success' => false,
+                        'error' => $content ? $content['error']['message']['value'] : 'Geen error teruggegeven',
+                    ];
                 }
             }
             //            } catch (Exception $e) {

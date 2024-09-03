@@ -25,11 +25,17 @@ class DashedEcommerceExactonlineServiceProvider extends PackageServiceProvider
     {
         $this->app->booted(function () {
             $schedule = app(Schedule::class);
-            $schedule->command(RefreshExactonlineTokenCommand::class)->everyMinute();
-            $schedule->command(PushProductsToExactonlineCommand::class)->everyFifteenMinutes();
+            $schedule->command(RefreshExactonlineTokenCommand::class)
+                ->everyMinute()
+                ->withoutOverlapping();
+            $schedule->command(PushProductsToExactonlineCommand::class)
+                ->everyFifteenMinutes()
+                ->withoutOverlapping();
             //Only for vat rate atm, but not used
             //                    $schedule->command(SyncProductsWithExactonlineCommand::class)->everyFifteenMinutes();
-            $schedule->command(PushOrdersToExactonlineCommand::class)->everyMinute();
+            $schedule->command(PushOrdersToExactonlineCommand::class)
+                ->everyMinute()
+                ->withoutOverlapping();
         });
 
         Livewire::component('show-exactonline-order', ShowExactonlineOrder::class);
