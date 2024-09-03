@@ -2,10 +2,10 @@
 
 namespace Dashed\DashedEcommerceExactonline\Filament\Resources\ExactonlineProductResource\Pages;
 
-use Dashed\DashedEcommerceCore\Models\Product;
 use Filament\Resources\Pages\ListRecords;
-use Dashed\DashedEcommerceExactonline\Filament\Resources\ExactonlineProductResource;
 use Illuminate\Database\Eloquent\Builder;
+use Dashed\DashedEcommerceCore\Models\Product;
+use Dashed\DashedEcommerceExactonline\Filament\Resources\ExactonlineProductResource;
 
 class ListExactonlineProducts extends ListRecords
 {
