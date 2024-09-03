@@ -2,7 +2,6 @@
 
 namespace Dashed\DashedEcommerceExactonline\Filament\Pages\Settings;
 
-use Filament\Actions\Action;
 use Filament\Forms\Set;
 use Filament\Pages\Page;
 use Filament\Forms\Components\Tabs;
@@ -55,14 +54,14 @@ class ExactonlineSettingsPage extends Page
             $schema = [
                 Placeholder::make('label')
                     ->label("Exactonline voor {$site['name']}")
-                    ->content(fn() => !Customsetting::get('exactonline_connected', $site['id'], 0) ? 'Activeer Exactonline' : '')
+                    ->content(fn () => ! Customsetting::get('exactonline_connected', $site['id'], 0) ? 'Activeer Exactonline' : '')
                     ->hintActions([
                         \Filament\Forms\Components\Actions\Action::make('connectExactonline')
                             ->label('Connect Exactonline')
                             ->button()
                             ->url(route('dashed.exactonline.authenticate', [$site['id']]))
                             ->openUrlInNewTab()
-                            ->visible(!Customsetting::get('exactonline_connected', $site['id'], 0))
+                            ->visible(! Customsetting::get('exactonline_connected', $site['id'], 0)),
                     ])
                     ->columnSpan([
                         'default' => 1,
