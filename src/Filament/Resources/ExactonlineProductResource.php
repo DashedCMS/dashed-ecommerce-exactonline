@@ -2,18 +2,25 @@
 
 namespace Dashed\DashedEcommerceExactonline\Filament\Resources;
 
+use Dashed\DashedEcommerceExactonline\Filament\Resources\ExactonlineProductResource\Pages\ListExactonlineProducts;
+use Dashed\DashedEcommerceExactonline\Models\ExactonlineProduct;
 use Filament\Forms\Form;
+use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Table;
 use Filament\Resources\Resource;
-use Filament\Tables\Columns\IconColumn;
+use Filament\Forms\Components\Card;
+use Filament\Forms\Components\Toggle;
 use Filament\Tables\Columns\TextColumn;
 use Illuminate\Database\Eloquent\Model;
+use Filament\Forms\Components\Placeholder;
+use Filament\Tables\Columns\BooleanColumn;
 use Dashed\DashedEcommerceMontaportal\Models\MontaportalProduct;
-use Dashed\DashedEcommerceExactonline\Filament\Resources\ExactonlineProductResource\Pages\ListExactonlineProducts;
+use Dashed\DashedEcommerceMontaportal\Filament\Resources\MontaportalProductResource\Pages\EditMontaportalProduct;
+use Dashed\DashedEcommerceMontaportal\Filament\Resources\MontaportalProductResource\Pages\ListMontaportalProducts;
 
 class ExactonlineProductResource extends Resource
 {
-    protected static ?string $model = MontaportalProduct::class;
+    protected static ?string $model = ExactonlineProduct::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-shopping-bag';
     protected static ?string $navigationGroup = 'E-commerce';
@@ -40,12 +47,14 @@ class ExactonlineProductResource extends Resource
                     ->sortable(),
                 IconColumn::make('is_synced')
                     ->label('Is gesynchroniseerd')
-                    ->getStateUsing(fn ($record) => $record->exactonline_id ? true : false)
+                    ->getStateUsing(fn($record) => $record->exactonline_id ? true : false)
                     ->trueIcon('heroicon-o-check-circle')
                     ->falseIcon('heroicon-o-x-circle'),
                 TextColumn::make('error')
                     ->label('Foutmelding')
-                    ->getStateUsing(fn ($record) => ! $record->exactonline_id ? $record->error : ''),
+                    ->sortable()
+                    ->searchable()
+                    ->getStateUsing(fn($record) => !$record->exactonline_id ? $record->error : '')
 
             ])
             ->filters([
