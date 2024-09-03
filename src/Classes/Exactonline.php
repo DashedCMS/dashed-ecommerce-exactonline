@@ -749,6 +749,7 @@ class Exactonline
                 }
 
                 dump($content);
+
                 return [
                     'success' => false,
                     'error' => $content ? $content['error']['message']['value'] : 'Geen error teruggegeven',
