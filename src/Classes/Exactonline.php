@@ -587,7 +587,7 @@ class Exactonline
         }
 
         $exactCustomerId = Customsetting::get('exactonline_customer_id', $order->site_short);
-        if ($exactCustomerId && ($order->isPaidFor() || $order->isReturn())) {
+        if ($exactCustomerId && ($order->isPaidFor() || $order->isReturnStatus())) {
             //            try {
 
             $discount = $order->discount;
