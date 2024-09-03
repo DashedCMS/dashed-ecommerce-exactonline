@@ -2,6 +2,7 @@
 
 namespace Dashed\DashedEcommerceExactonline;
 
+use Dashed\DashedEcommerceExactonline\Filament\Resources\ExactonlineProductResource;
 use Filament\Panel;
 use Filament\Contracts\Plugin;
 use Dashed\DashedEcommerceExactonline\Filament\Widgets\ExactonlineOrderStats;
@@ -22,6 +23,9 @@ class DashedEcommerceExactonlinePlugin implements Plugin
             ])
             ->pages([
                 ExactonlineSettingsPage::class,
+            ])
+            ->resources([
+                ExactonlineProductResource::class,
             ]);
     }
 

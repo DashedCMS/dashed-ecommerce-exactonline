@@ -42,7 +42,7 @@ class PushProductsToExactonlineCommand extends Command
         if (Exactonline::isConnected()) {
             $this->info('Exactonline is connected, pushing products');
             foreach (Product::isNotBundle()->get() as $product) {
-                $this->info('Pushing product ' . $product->name);
+                $this->info('Pushing product ' . $product->name . ' with id ' . $product->id);
                 Exactonline::pushProduct($product);
             }
         } else {
