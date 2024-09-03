@@ -200,7 +200,7 @@ class Exactonline
                 CURLOPT_HTTPHEADER => [
                     "Content-Type: application/x-www-form-urlencoded",
                     "Accept: application/json",
-                    "Authorization: Bearer " . Customsetting::get('exactonline_access_token', $siteId),
+                    "Authorization: Bearer " . Customsetting::get('exactonline_access_token', $siteId) . 's',
                 ],
             ]);
 
@@ -265,7 +265,7 @@ class Exactonline
             CURLOPT_HTTPHEADER => [
                 "Content-type: application/json",
                 "Accept: application/json",
-                "Authorization: Bearer " . Customsetting::get('exactonline_access_token', $siteId),
+                "Authorization: Bearer " . Customsetting::get('exactonline_access_token', $siteId) . 's',
             ],
         ]);
 
@@ -344,7 +344,7 @@ class Exactonline
             CURLOPT_HTTPHEADER => [
                 "Content-type: application/json",
                 "Accept: application/json",
-                "Authorization: Bearer " . Customsetting::get('exactonline_access_token', $siteId),
+                "Authorization: Bearer " . Customsetting::get('exactonline_access_token', $siteId) . 's',
             ],
         ]);
 
@@ -409,7 +409,7 @@ class Exactonline
         //            CURLOPT_HTTPHEADER => [
         //                "Content-Type: application/json",
         //                "Accept: application/json",
-        //                "Authorization: Bearer " . Customsetting::get('exactonline_access_token', $siteId),
+        //                "Authorization: Bearer " . Customsetting::get('exactonline_access_token', $siteId) . 's',
         //            ],
         //        ]);
         //
@@ -517,7 +517,7 @@ class Exactonline
         //            CURLOPT_HTTPHEADER => [
         //                "Content-Type: application/json",
         //                "Accept: application/json",
-        //                "Authorization: Bearer " . Customsetting::get('exactonline_access_token', $siteId),
+        //                "Authorization: Bearer " . Customsetting::get('exactonline_access_token', $siteId) . 's',
         //            ],
         //        ]);
         //
@@ -550,7 +550,7 @@ class Exactonline
         //                CURLOPT_HTTPHEADER => [
         //                    "Content-Type: application/json",
         //                    "Accept: application/json",
-        //                    "Authorization: Bearer " . Customsetting::get('exactonline_access_token', $siteId),
+        //                    "Authorization: Bearer " . Customsetting::get('exactonline_access_token', $siteId) . 's',
         //                ],
         //            ]);
         //
@@ -741,19 +741,31 @@ class Exactonline
                     'orderId' => $id,
                 ];
             } else {
-                if ($order->exactonlineOrder->pushed != 2) {
+//                dd($content, $salesOrderLines);
+                if(($content['error']['message']['value'] ?? '') == 'Verkoopordernummer: Bestaat reeds'){
+                    $order->exactonlineOrder->pushed = 1;
+                    $order->exactonlineOrder->error = $content ? $content['error']['message']['value'] : 'Geen error teruggegeven';
+                    $order->exactonlineOrder->save();
+
+                    return [
+                        'success' => true,
+                        'error' => $content ? $content['error']['message']['value'] : 'Geen error teruggegeven',
+                    ];
+                }else{
+                    if ($order->exactonlineOrder->pushed != 2) {
+                        Mails::sendNotificationToAdmins('Order #' . $order->id . ' failed to push to Exactonline');
+                    }
+
+                    dump($content);
                     $order->exactonlineOrder->pushed = 2;
                     $order->exactonlineOrder->error = $content ? $content['error']['message']['value'] : 'Geen error teruggegeven';
                     $order->exactonlineOrder->save();
-                    Mails::sendNotificationToAdmins('Order #' . $order->id . ' failed to push to Exactonline');
+
+                    return [
+                        'success' => false,
+                        'error' => $content ? $content['error']['message']['value'] : 'Geen error teruggegeven',
+                    ];
                 }
-
-                dump($content);
-
-                return [
-                    'success' => false,
-                    'error' => $content ? $content['error']['message']['value'] : 'Geen error teruggegeven',
-                ];
             }
             //            } catch (Exception $e) {
             ////                if ($order->exactonlineOrder->pushed != 2) {
@@ -780,7 +792,7 @@ class Exactonline
             //                    E_USER_ERROR
             //                );
             //            }
-        } else {
+        }else{
             return [
                 'success' => false,
                 'error' => 'No customer id found or order not paid',
@@ -813,7 +825,7 @@ class Exactonline
             CURLOPT_HTTPHEADER => [
                 "Content-Type: application/json",
                 "Accept: application/json",
-                "Authorization: Bearer " . Customsetting::get('exactonline_access_token', $siteId),
+                "Authorization: Bearer " . Customsetting::get('exactonline_access_token', $siteId) . 's',
             ],
         ]);
 
@@ -845,6 +857,7 @@ class Exactonline
         }
 
         $vatCodes = self::getVatCodes($siteId);
+//        dd($vatCodes);
         foreach ($vatCodes as $vatCode) {
             if ($vatCode['Percentage'] == $vatRate / 100 && $vatCode['Type'] == 'I') {
                 return $vatCode['Code'];
@@ -887,7 +900,7 @@ class Exactonline
             CURLOPT_HTTPHEADER => [
                 "Content-Type: application/json",
                 "Accept: application/json",
-                "Authorization: Bearer " . Customsetting::get('exactonline_access_token', $siteId),
+                "Authorization: Bearer " . Customsetting::get('exactonline_access_token', $siteId) . 's',
             ],
         ]);
 
