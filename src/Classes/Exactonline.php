@@ -746,12 +746,13 @@ class Exactonline
                     $order->exactonlineOrder->error = $content ? $content['error']['message']['value'] : 'Geen error teruggegeven';
                     $order->exactonlineOrder->save();
                     Mails::sendNotificationToAdmins('Order #' . $order->id . ' failed to push to Exactonline');
-
-                    return [
-                        'success' => false,
-                        'error' => $content ? $content['error']['message']['value'] : 'Geen error teruggegeven',
-                    ];
                 }
+
+                dump($content);
+                return [
+                    'success' => false,
+                    'error' => $content ? $content['error']['message']['value'] : 'Geen error teruggegeven',
+                ];
             }
             //            } catch (Exception $e) {
             ////                if ($order->exactonlineOrder->pushed != 2) {
