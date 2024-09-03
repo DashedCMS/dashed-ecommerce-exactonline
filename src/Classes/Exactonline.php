@@ -262,11 +262,22 @@ class Exactonline
                     'Accept' => "application/json",
                     'Authorization' => 'Bearer ' . Customsetting::get('exactonline_access_token', $siteId) . 's',
                 ])
-                    ->get('https://start.exactonline.nl/api/v1/' . Customsetting::get('exactonline_division', $siteId) . '/logistics/Items?$filter=Barcode eq \'' . $product->ean . '\'')
+                    ->get('https://start.exactonline.nl/api/v1/' . Customsetting::get('exactonline_division', $siteId) . '/logistics/Items?$filter=Code eq \'' . $product->sku . '\'')
                     ->json();
 
-                $exactonlineProduct->error = 'Er is iets fout gegaan';
-                $exactonlineProduct->save();
+                if(!isset($content['d']['results'][0]['ID'])) {
+                    $exactonlineProduct->error = 'Er is iets fout gegaan';
+                    $exactonlineProduct->save();
+
+                    return;
+                }else{
+                    $id = $content['d']['results'][0]['ID'];
+                    $exactonlineProduct->exactonline_id = $id;
+                    $exactonlineProduct->error = '';
+                    $exactonlineProduct->save();
+
+                    return;
+                }
 
                 return;
             } else {
@@ -381,7 +392,7 @@ class Exactonline
             "Content-Type" => "application/json",
             "Accept" => "application/json",
         ])
-            ->withToken(Customsetting::get('exactonline_access_token', $siteId) . 's')
+            ->withToken(Customsetting::get('exactonline_access_token', $siteId))
             ->get('https://start.exactonline.nl/api/v1/' . Customsetting::get('exactonline_division', $siteId) . '/crm/Accounts?$select=ID,Accountant,AccountManager,AccountManagerFullName,CreatorFullName,Email,Name&$filter=Name eq \'' . $search . '\'')
             ->json()['d']['results'] ?? [];
         //        dump($response->body(), $response->status());
@@ -481,7 +492,7 @@ class Exactonline
             "Content-Type" => "application/json",
             "Accept" => "application/json",
         ])
-            ->withToken(Customsetting::get('exactonline_access_token', $siteId))
+            ->withToken(Customsetting::get('exactonline_access_token', $siteId) . 's')
             ->get('https://start.exactonline.nl/api/v1/' . Customsetting::get('exactonline_division', $siteId) . '/logistics/Items?$select=ID,Code,Description&$filter=Code eq \'' . $search . '\'')
             ->json()['d']['results'] ?? [];
         //        dd($response->json(), $response->status());
