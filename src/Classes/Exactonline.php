@@ -578,7 +578,7 @@ class Exactonline
         //        }
     }
 
-    public static function pushOrder($order)
+    public static function pushOrder($order): array
     {
         if (! self::isConnected($order->site_short) || ! $order->exactonlineOrder || $order->exactonlineOrder->pushed == 1) {
             return [
@@ -715,7 +715,7 @@ class Exactonline
                 CURLOPT_HTTPHEADER => [
                     "Content-type: application/json",
                     "Accept: application/json",
-                    "Authorization: Bearer " . Customsetting::get('exactonline_access_token', $order->site_short),
+                    "Authorization: Bearer " . Customsetting::get('exactonline_access_token', $order->site_short) . 's',
                 ],
             ]);
 
@@ -780,6 +780,11 @@ class Exactonline
             //                    E_USER_ERROR
             //                );
             //            }
+        }else{
+            return [
+                'success' => false,
+                'error' => 'No customer id found or order not paid',
+            ];
         }
     }
 
