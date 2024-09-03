@@ -2,7 +2,6 @@
 
 namespace Dashed\DashedEcommerceExactonline\Filament\Pages\Settings;
 
-use Closure;
 use Filament\Forms\Set;
 use Filament\Pages\Page;
 use Filament\Forms\Components\Tabs;
