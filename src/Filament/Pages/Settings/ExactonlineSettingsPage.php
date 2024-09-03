@@ -3,6 +3,7 @@
 namespace Dashed\DashedEcommerceExactonline\Filament\Pages\Settings;
 
 use Closure;
+use Filament\Forms\Set;
 use Filament\Pages\Page;
 use Filament\Forms\Components\Tabs;
 use Dashed\DashedCore\Classes\Sites;
@@ -50,6 +51,7 @@ class ExactonlineSettingsPage extends Page
 
         $tabs = [];
         foreach ($sites as $site) {
+            $GLAccounts = Exactonline::getGLAccounts($site['id']);
             $schema = [
                 Placeholder::make('label')
                     ->label("Exactonline voor {$site['name']}")
@@ -77,17 +79,17 @@ class ExactonlineSettingsPage extends Page
                 Select::make("exactonline_vat_codes_gl_to_pay_{$site['id']}")
                     ->label('Exactonline VAT rate GL rekening ID (to pay)')
                     ->required()
-                    ->options(collect(Exactonline::getGLAccounts($site['id']))->pluck('Description', 'ID'))
+                    ->options(collect($GLAccounts)->pluck('Description', 'ID'))
                     ->visible(Customsetting::get('exactonline_connected', $site['id'], 0) ? true : false),
                 Select::make("exactonline_vat_codes_gl_to_claim_{$site['id']}")
                     ->label('Exactonline VAT rate GL rekening ID (to claim)')
                     ->required()
-                    ->options(collect(Exactonline::getGLAccounts($site['id']))->pluck('Description', 'ID'))
+                    ->options(collect($GLAccounts)->pluck('Description', 'ID'))
                     ->visible(Customsetting::get('exactonline_connected', $site['id'], 0) ? true : false),
                 TextInput::make("exactonline_payment_costs_search_product_id_{$site['id']}")
                     ->label('Zoek product voor betalingskosten')
                     ->reactive()
-                    ->afterStateUpdated(function ($state, Closure $set) use ($site) {
+                    ->afterStateUpdated(function ($state, Set $set) use ($site) {
                         $response = Exactonline::getItems($site['id'], $state);
                         if ($response[0] ?? false) {
                             $set('exactonline_payment_costs_product_id_' . $site['id'], $response[0]['ID']);
@@ -103,7 +105,7 @@ class ExactonlineSettingsPage extends Page
                 TextInput::make("exactonline_shipping_costs_search_product_id_{$site['id']}")
                     ->label('Zoek product voor verzendkosten')
                     ->reactive()
-                    ->afterStateUpdated(function ($state, Closure $set) use ($site) {
+                    ->afterStateUpdated(function ($state, Set $set) use ($site) {
                         $response = Exactonline::getItems($site['id'], $state);
                         if ($response[0] ?? false) {
                             $set('exactonline_shipping_costs_product_id_' . $site['id'], $response[0]['ID']);
@@ -119,7 +121,7 @@ class ExactonlineSettingsPage extends Page
                 TextInput::make("exactonline_search_customer_id_{$site['id']}")
                     ->label('Zoek klant voor alle bestellingen')
                     ->reactive()
-                    ->afterStateUpdated(function ($state, Closure $set) use ($site) {
+                    ->afterStateUpdated(function ($state, Set $set) use ($site) {
                         $response = Exactonline::getCustomers($site['id'], $state);
                         if ($response[0] ?? false) {
                             $set('exactonline_customer_id_' . $site['id'], $response[0]['ID']);
