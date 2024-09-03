@@ -265,12 +265,12 @@ class Exactonline
                     ->get('https://start.exactonline.nl/api/v1/' . Customsetting::get('exactonline_division', $siteId) . '/logistics/Items?$filter=Code eq \'' . $product->sku . '\'')
                     ->json();
 
-                if (! isset($content['d']['results'][0]['ID'])) {
+                if(!isset($content['d']['results'][0]['ID'])) {
                     $exactonlineProduct->error = 'Er is iets fout gegaan';
                     $exactonlineProduct->save();
 
                     return;
-                } else {
+                }else{
                     $id = $content['d']['results'][0]['ID'];
                     $exactonlineProduct->exactonline_id = $id;
                     $exactonlineProduct->error = '';
@@ -588,7 +588,7 @@ class Exactonline
         }
 
         foreach ($order->orderProducts as $orderProduct) {
-            if ($orderProduct->product && ! $orderProduct->product->exactonlineProduct || ! $orderProduct->product->exactonlineProduct->exactonline_id) {
+            if ($orderProduct->product && (!$orderProduct->product->exactonlineProduct || !$orderProduct->product->exactonlineProduct->exactonline_id)) {
                 $order->exactonlineOrder->pushed = 2;
                 $order->exactonlineOrder->error = 'Product ' . $orderProduct->product->name . ' is not pushed to Exactonline yet';
                 $order->exactonlineOrder->save();
