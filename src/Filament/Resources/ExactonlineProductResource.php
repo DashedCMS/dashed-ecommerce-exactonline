@@ -2,20 +2,14 @@
 
 namespace Dashed\DashedEcommerceExactonline\Filament\Resources;
 
-use Dashed\DashedEcommerceExactonline\Filament\Resources\ExactonlineProductResource\Pages\ListExactonlineProducts;
 use Filament\Forms\Form;
-use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Table;
 use Filament\Resources\Resource;
-use Filament\Forms\Components\Card;
-use Filament\Forms\Components\Toggle;
+use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Columns\TextColumn;
 use Illuminate\Database\Eloquent\Model;
-use Filament\Forms\Components\Placeholder;
-use Filament\Tables\Columns\BooleanColumn;
 use Dashed\DashedEcommerceMontaportal\Models\MontaportalProduct;
-use Dashed\DashedEcommerceMontaportal\Filament\Resources\MontaportalProductResource\Pages\EditMontaportalProduct;
-use Dashed\DashedEcommerceMontaportal\Filament\Resources\MontaportalProductResource\Pages\ListMontaportalProducts;
+use Dashed\DashedEcommerceExactonline\Filament\Resources\ExactonlineProductResource\Pages\ListExactonlineProducts;
 
 class ExactonlineProductResource extends Resource
 {
@@ -46,12 +40,12 @@ class ExactonlineProductResource extends Resource
                     ->sortable(),
                 IconColumn::make('is_synced')
                     ->label('Is gesynchroniseerd')
-                    ->getStateUsing(fn($record) => $record->exactonline_id ? true : false)
+                    ->getStateUsing(fn ($record) => $record->exactonline_id ? true : false)
                     ->trueIcon('heroicon-o-check-circle')
                     ->falseIcon('heroicon-o-x-circle'),
                 TextColumn::make('error')
                     ->label('Foutmelding')
-                    ->getStateUsing(fn($record) => !$record->exactonline_id ? $record->error : '')
+                    ->getStateUsing(fn ($record) => ! $record->exactonline_id ? $record->error : ''),
 
             ])
             ->filters([

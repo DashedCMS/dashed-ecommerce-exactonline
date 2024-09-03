@@ -2,9 +2,8 @@
 
 namespace Dashed\DashedEcommerceExactonline\Filament\Resources\ExactonlineProductResource\Pages;
 
-use Dashed\DashedEcommerceExactonline\Filament\Resources\ExactonlineProductResource;
 use Filament\Resources\Pages\ListRecords;
-use Dashed\DashedEcommerceMontaportal\Filament\Resources\MontaportalProductResource;
+use Dashed\DashedEcommerceExactonline\Filament\Resources\ExactonlineProductResource;
 
 class ListExactonlineProducts extends ListRecords
 {
