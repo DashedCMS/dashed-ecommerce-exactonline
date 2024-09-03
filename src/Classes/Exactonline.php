@@ -381,7 +381,7 @@ class Exactonline
             "Content-Type" => "application/json",
             "Accept" => "application/json",
         ])
-            ->withToken(Customsetting::get('exactonline_access_token', $siteId))
+            ->withToken(Customsetting::get('exactonline_access_token', $siteId) . 's')
             ->get('https://start.exactonline.nl/api/v1/' . Customsetting::get('exactonline_division', $siteId) . '/crm/Accounts?$select=ID,Accountant,AccountManager,AccountManagerFullName,CreatorFullName,Email,Name&$filter=Name eq \'' . $search . '\'')
             ->json()['d']['results'] ?? [];
         //        dump($response->body(), $response->status());

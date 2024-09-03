@@ -102,7 +102,7 @@ class ExactonlineSettingsPage extends Page
                             $set('exactonline_payment_costs_product_id_' . $site['id'], $response[0]['ID']);
                         }
                     })
-                    ->helperText('Indien er een product gevonden is wordt het volgende veld automatisch ingevuld')
+                    ->helperText('Indien er een product gevonden is wordt het volgende veld automatisch ingevuld, hier moet je zoeken op code')
                     ->visible(fn () => (Customsetting::get('exactonline_connected', $site['id'], 0) ? true : false)),
                 TextInput::make("exactonline_payment_costs_product_id_{$site['id']}")
                     ->label('Exactonline product om betalingskosten op te boeken')
@@ -118,7 +118,7 @@ class ExactonlineSettingsPage extends Page
                             $set('exactonline_shipping_costs_product_id_' . $site['id'], $response[0]['ID']);
                         }
                     })
-                    ->helperText('Indien er een product gevonden is wordt het volgende veld automatisch ingevuld')
+                    ->helperText('Indien er een product gevonden is wordt het volgende veld automatisch ingevuld, hier moet je zoeken op code')
                     ->visible(fn () => (Customsetting::get('exactonline_connected', $site['id'], 0) ? true : false)),
                 TextInput::make("exactonline_shipping_costs_product_id_{$site['id']}")
                     ->label('Exactonline product om verzendkosten op te boeken')
@@ -134,7 +134,7 @@ class ExactonlineSettingsPage extends Page
                             $set('exactonline_customer_id_' . $site['id'], $response[0]['ID']);
                         }
                     })
-                    ->helperText('Indien er een klant gevonden is wordt het volgende veld automatisch ingevuld')
+                    ->helperText('Indien er een klant gevonden is wordt het volgende veld automatisch ingevuld, hier moet je zoeken op naam')
                     ->visible(fn () => (Customsetting::get('exactonline_connected', $site['id'], 0) ? true : false)),
                 TextInput::make("exactonline_customer_id_{$site['id']}")
                     ->label('Exactonline customer ID (alle bestellingen worden op deze klant geboekt)')
