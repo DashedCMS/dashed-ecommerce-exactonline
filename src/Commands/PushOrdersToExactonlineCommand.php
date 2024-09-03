@@ -44,9 +44,9 @@ class PushOrdersToExactonlineCommand extends Command
             foreach (ExactonlineOrder::where('pushed', '!=', 1)->limit(50)->with(['order'])->get() as $exactonlineOrder) {
                 $this->info('Pushing order ' . $exactonlineOrder->order->id);
                 $response = Exactonline::pushOrder($exactonlineOrder->order);
-                if($response['success']){
+                if ($response['success']) {
                     $this->info('Order pushed successfully');
-                }else{
+                } else {
                     $this->error('Order push failed: ' . $response['error']);
                 }
             }
