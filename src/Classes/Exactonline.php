@@ -780,7 +780,7 @@ class Exactonline
             //                    E_USER_ERROR
             //                );
             //            }
-        }else{
+        } else {
             return [
                 'success' => false,
                 'error' => 'No customer id found or order not paid',
