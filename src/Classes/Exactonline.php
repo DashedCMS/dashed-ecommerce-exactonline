@@ -741,8 +741,8 @@ class Exactonline
                     'orderId' => $id,
                 ];
             } else {
-//                dd($content, $salesOrderLines);
-                if(($content['error']['message']['value'] ?? '') == 'Verkoopordernummer: Bestaat reeds'){
+                //                dd($content, $salesOrderLines);
+                if (($content['error']['message']['value'] ?? '') == 'Verkoopordernummer: Bestaat reeds') {
                     $order->exactonlineOrder->pushed = 1;
                     $order->exactonlineOrder->error = $content ? $content['error']['message']['value'] : 'Geen error teruggegeven';
                     $order->exactonlineOrder->save();
@@ -751,7 +751,7 @@ class Exactonline
                         'success' => true,
                         'error' => $content ? $content['error']['message']['value'] : 'Geen error teruggegeven',
                     ];
-                }else{
+                } else {
                     if ($order->exactonlineOrder->pushed != 2) {
                         Mails::sendNotificationToAdmins('Order #' . $order->id . ' failed to push to Exactonline');
                     }
@@ -792,7 +792,7 @@ class Exactonline
             //                    E_USER_ERROR
             //                );
             //            }
-        }else{
+        } else {
             return [
                 'success' => false,
                 'error' => 'No customer id found or order not paid',
@@ -857,7 +857,7 @@ class Exactonline
         }
 
         $vatCodes = self::getVatCodes($siteId);
-//        dd($vatCodes);
+        //        dd($vatCodes);
         foreach ($vatCodes as $vatCode) {
             if ($vatCode['Percentage'] == $vatRate / 100 && $vatCode['Type'] == 'I') {
                 return $vatCode['Code'];
