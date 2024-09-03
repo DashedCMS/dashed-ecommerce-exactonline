@@ -43,7 +43,12 @@ class PushOrdersToExactonlineCommand extends Command
             $this->info('Exactonline is connected, pushing orders');
             foreach (ExactonlineOrder::where('pushed', '!=', 1)->limit(50)->with(['order'])->get() as $exactonlineOrder) {
                 $this->info('Pushing order ' . $exactonlineOrder->order->id);
-                Exactonline::pushOrder($exactonlineOrder->order);
+                $response = Exactonline::pushOrder($exactonlineOrder->order);
+                if($response['success']){
+                    $this->info('Order pushed successfully');
+                }else{
+                    $this->error('Order push failed: ' . $response['error']);
+                }
             }
         } else {
             $this->error('Exactonline is not connected, please connect first');
