@@ -85,12 +85,12 @@ class ExactonlineSettingsPage extends Page
                     ->maxLength(255),
                 Select::make("exactonline_vat_codes_gl_to_pay_{$site['id']}")
                     ->label('Exactonline VAT rate GL rekening ID (to pay)')
-                    ->required()
+//                    ->required()
                     ->options(collect($GLAccounts)->pluck('Description', 'ID'))
                     ->visible(Customsetting::get('exactonline_connected', $site['id'], 0) ? true : false),
                 Select::make("exactonline_vat_codes_gl_to_claim_{$site['id']}")
                     ->label('Exactonline VAT rate GL rekening ID (to claim)')
-                    ->required()
+//                    ->required()
                     ->options(collect($GLAccounts)->pluck('Description', 'ID'))
                     ->visible(Customsetting::get('exactonline_connected', $site['id'], 0) ? true : false),
                 TextInput::make("exactonline_payment_costs_search_product_id_{$site['id']}")
@@ -106,7 +106,7 @@ class ExactonlineSettingsPage extends Page
                     ->visible(fn () => (Customsetting::get('exactonline_connected', $site['id'], 0) ? true : false)),
                 TextInput::make("exactonline_payment_costs_product_id_{$site['id']}")
                     ->label('Exactonline product om betalingskosten op te boeken')
-                    ->required()
+//                    ->required()
                     ->reactive()
                     ->visible(fn () => (Customsetting::get('exactonline_connected', $site['id'], 0) ? true : false)),
                 TextInput::make("exactonline_shipping_costs_search_product_id_{$site['id']}")
@@ -122,7 +122,7 @@ class ExactonlineSettingsPage extends Page
                     ->visible(fn () => (Customsetting::get('exactonline_connected', $site['id'], 0) ? true : false)),
                 TextInput::make("exactonline_shipping_costs_product_id_{$site['id']}")
                     ->label('Exactonline product om verzendkosten op te boeken')
-                    ->required()
+//                    ->required()
                     ->reactive()
                     ->visible(fn () => (Customsetting::get('exactonline_connected', $site['id'], 0) ? true : false)),
                 TextInput::make("exactonline_search_customer_id_{$site['id']}")
@@ -138,7 +138,7 @@ class ExactonlineSettingsPage extends Page
                     ->visible(fn () => (Customsetting::get('exactonline_connected', $site['id'], 0) ? true : false)),
                 TextInput::make("exactonline_customer_id_{$site['id']}")
                     ->label('Exactonline customer ID (alle bestellingen worden op deze klant geboekt)')
-                    ->required()
+//                    ->required()
                     ->reactive()
                     ->visible(fn () => (Customsetting::get('exactonline_connected', $site['id'], 0) ? true : false)),
             ];
