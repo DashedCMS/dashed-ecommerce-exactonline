@@ -16,7 +16,7 @@ class ExactonlineProductResource extends Resource
     protected static ?string $model = ExactonlineProduct::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-shopping-bag';
-    protected static ?string $navigationGroup = 'E-commerce';
+    protected static ?string $navigationGroup = 'Producten';
     protected static ?string $navigationLabel = 'Exactonline producten';
     protected static ?string $label = 'Exactonline product';
     protected static ?string $pluralLabel = 'Exactonline producten';

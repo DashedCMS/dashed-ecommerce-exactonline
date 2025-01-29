@@ -2,6 +2,7 @@
 
 namespace Dashed\DashedEcommerceExactonline;
 
+use Dashed\DashedCore\DashedCorePlugin;
 use Livewire\Livewire;
 use Spatie\LaravelPackageTools\Package;
 use Illuminate\Console\Scheduling\Schedule;
@@ -87,5 +88,9 @@ class DashedEcommerceExactonlineServiceProvider extends PackageServiceProvider
                 SyncProductsWithExactonlineCommand::class,
                 PushOrdersToExactonlineCommand::class,
             ]);
+
+        cms()->builder('plugins', [
+            new DashedEcommerceExactonlinePlugin(),
+        ]);
     }
 }
