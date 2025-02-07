@@ -53,17 +53,7 @@ class DashedEcommerceExactonlineServiceProvider extends PackageServiceProvider
     {
         $this->loadMigrationsFrom(__DIR__ . '/../database/migrations');
 
-        cms()->builder(
-            'settingPages',
-            array_merge(cms()->builder('settingPages'), [
-                'exactonline' => [
-                    'name' => 'Exactonline',
-                    'description' => 'Koppel Exactonline',
-                    'icon' => 'archive-box',
-                    'page' => ExactonlineSettingsPage::class,
-                ],
-            ])
-        );
+        cms()->registerSettingsPage(ExactonlineSettingsPage::class, 'Exactonline', 'archive-box', 'Koppel Exactonline');
 
         ecommerce()->widgets(
             'orders',
