@@ -13,7 +13,7 @@ class ListExactonlineProducts extends ListRecords
 
     protected function getTableQuery(): ?Builder
     {
-        $productIds = Product::isNotBundle()->notParentProduct()->pluck('id');
+        $productIds = Product::isNotBundle()->pluck('id');
 
         return parent::getTableQuery()->whereIn('product_id', $productIds);
     }
