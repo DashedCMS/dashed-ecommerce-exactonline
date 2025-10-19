@@ -7,6 +7,8 @@ use Dashed\DashedEcommerceExactonline\Models\ExactonlineOrder;
 
 class ExactonlineOrderStats extends StatsOverviewWidget
 {
+    protected static ?int $sort = 1000000;
+
     protected function getCards(): array
     {
         return [

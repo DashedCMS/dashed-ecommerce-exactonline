@@ -2,16 +2,17 @@
 
 namespace Dashed\DashedEcommerceExactonline\Filament\Pages\Settings;
 
-use Filament\Forms\Set;
 use Filament\Pages\Page;
-use Filament\Forms\Components\Tabs;
+use Filament\Schemas\Schema;
 use Dashed\DashedCore\Classes\Sites;
 use Filament\Forms\Components\Select;
-use Filament\Forms\Components\Tabs\Tab;
+use Filament\Schemas\Components\Tabs;
 use Filament\Forms\Components\TextInput;
 use Filament\Notifications\Notification;
-use Filament\Forms\Components\Placeholder;
+use Filament\Schemas\Components\Tabs\Tab;
 use Dashed\DashedCore\Models\Customsetting;
+use Filament\Infolists\Components\TextEntry;
+use Filament\Schemas\Components\Utilities\Set;
 use Dashed\DashedEcommerceExactonline\Classes\Exactonline;
 
 class ExactonlineSettingsPage extends Page
@@ -19,7 +20,7 @@ class ExactonlineSettingsPage extends Page
     protected static bool $shouldRegisterNavigation = false;
     protected static ?string $title = 'Exactonline';
 
-    protected static string $view = 'dashed-core::settings.pages.default-settings';
+    protected string $view = 'dashed-core::settings.pages.default-settings';
     public array $data = [];
 
     public function mount(): void
@@ -43,7 +44,7 @@ class ExactonlineSettingsPage extends Page
         $this->form->fill($formData);
     }
 
-    protected function getFormSchema(): array
+    public function form(Schema $schema): Schema
     {
         $sites = Sites::getSites();
         $tabGroups = [];
@@ -51,13 +52,12 @@ class ExactonlineSettingsPage extends Page
         $tabs = [];
         foreach ($sites as $site) {
             $GLAccounts = Exactonline::getGLAccounts($site['id']);
-            $schema = [
-                Placeholder::make('label')
-                    ->label("Exactonline voor {$site['name']}")
-                    ->content(fn () => ! Customsetting::get('exactonline_connected', $site['id'], 0) ? 'Activeer Exactonline' : '')
+            $newSchema = [
+                TextEntry::make("Exactonline voor {$site['name']}")
+                    ->state(fn () => ! Customsetting::get('exactonline_connected', $site['id'], 0) ? 'Activeer Exactonline' : '')
                     ->hintActions([
-                        \Filament\Forms\Components\Actions\Action::make('connectExactonline')
-                            ->label('Connect Exactonline')
+                        \Filament\Actions\Action::make('connectExactonline')
+                            ->state('Connect Exactonline')
                             ->button()
                             ->url(route('dashed.exactonline.authenticate', [$site['id']]))
                             ->openUrlInNewTab()
@@ -67,9 +67,8 @@ class ExactonlineSettingsPage extends Page
                         'default' => 1,
                         'lg' => 2,
                     ]),
-                Placeholder::make('label')
-                    ->label("Exactonline is " . (! Customsetting::get('exactonline_connected', $site['id'], 0) ? 'niet' : '') . ' geconnect')
-                    ->content(Customsetting::get('exactonline_connection_error', $site['id'], ''))
+                TextEntry::make("Exactonline is " . (! Customsetting::get('exactonline_connected', $site['id'], 0) ? 'niet' : '') . ' geconnect')
+                    ->state(Customsetting::get('exactonline_connection_error', $site['id'], ''))
                     ->columnSpan([
                         'default' => 1,
                         'lg' => 2,
@@ -145,7 +144,7 @@ class ExactonlineSettingsPage extends Page
 
             $tabs[] = Tab::make($site['id'])
                 ->label(ucfirst($site['name']))
-                ->schema($schema)
+                ->schema($newSchema)
                 ->columns([
                     'default' => 1,
                     'lg' => 2,
@@ -154,12 +153,8 @@ class ExactonlineSettingsPage extends Page
         $tabGroups[] = Tabs::make('Sites')
             ->tabs($tabs);
 
-        return $tabGroups;
-    }
-
-    public function getFormStatePath(): ?string
-    {
-        return 'data';
+        return $schema->schema($tabGroups)
+            ->statePath('data');
     }
 
     public function submit()

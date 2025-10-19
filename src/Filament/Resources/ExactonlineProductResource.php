@@ -2,8 +2,10 @@
 
 namespace Dashed\DashedEcommerceExactonline\Filament\Resources;
 
-use Filament\Forms\Form;
+use UnitEnum;
+use BackedEnum;
 use Filament\Tables\Table;
+use Filament\Schemas\Schema;
 use Filament\Resources\Resource;
 use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Columns\TextColumn;
@@ -15,19 +17,16 @@ class ExactonlineProductResource extends Resource
 {
     protected static ?string $model = ExactonlineProduct::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-shopping-bag';
-    protected static ?string $navigationGroup = 'Producten';
+    protected static string | BackedEnum | null $navigationIcon = 'heroicon-o-shopping-bag';
+    protected static string | UnitEnum | null $navigationGroup = 'Producten';
     protected static ?string $navigationLabel = 'Exactonline producten';
     protected static ?string $label = 'Exactonline product';
     protected static ?string $pluralLabel = 'Exactonline producten';
     protected static ?int $navigationSort = 10;
 
-    public static function form(Form $form): Form
+    public static function form(Schema $schema): Schema
     {
-        return $form
-            ->schema([
-
-            ]);
+        return parent::form($schema);
     }
 
     public static function table(Table $table): Table
