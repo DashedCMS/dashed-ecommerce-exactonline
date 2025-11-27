@@ -57,7 +57,7 @@ class ExactonlineSettingsPage extends Page
                     ->state(fn () => ! Customsetting::get('exactonline_connected', $site['id'], 0) ? 'Activeer Exactonline' : '')
                     ->hintActions([
                         \Filament\Actions\Action::make('connectExactonline')
-                            ->state('Connect Exactonline')
+                            ->label('Connect Exactonline')
                             ->button()
                             ->url(route('dashed.exactonline.authenticate', [$site['id']]))
                             ->openUrlInNewTab()
