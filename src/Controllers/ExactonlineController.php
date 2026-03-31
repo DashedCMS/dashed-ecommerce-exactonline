@@ -3,12 +3,14 @@
 namespace Dashed\DashedEcommerceExactonline\Controllers;
 
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
 use Dashed\DashedCore\Classes\Sites;
 use Dashed\DashedEcommerceExactonline\Classes\Exactonline;
-use Dashed\DashedCore\Controllers\Frontend\FrontendController;
+
+;
 use Dashed\DashedEcommerceExactonline\Filament\Pages\Settings\ExactonlineSettingsPage;
 
-class ExactonlineController extends FrontendController
+class ExactonlineController extends Controller
 {
     public function authenticate($siteId = null)
     {

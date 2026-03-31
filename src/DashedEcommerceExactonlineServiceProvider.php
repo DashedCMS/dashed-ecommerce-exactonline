@@ -3,11 +3,11 @@
 namespace Dashed\DashedEcommerceExactonline;
 
 use Livewire\Livewire;
+use Illuminate\Support\Facades\Gate;
 use Spatie\LaravelPackageTools\Package;
 use Illuminate\Console\Scheduling\Schedule;
 use Dashed\DashedEcommerceCore\Models\Order;
 use Dashed\DashedEcommerceCore\Models\Product;
-use Dashed\DashedCore\Support\MeasuresServiceProvider;
 use Spatie\LaravelPackageTools\PackageServiceProvider;
 use Dashed\DashedEcommerceExactonline\Models\ExactonlineOrder;
 use Dashed\DashedEcommerceExactonline\Models\ExactonlineProduct;
@@ -20,12 +20,10 @@ use Dashed\DashedEcommerceExactonline\Filament\Pages\Settings\ExactonlineSetting
 
 class DashedEcommerceExactonlineServiceProvider extends PackageServiceProvider
 {
-    use MeasuresServiceProvider;
     public static string $name = 'dashed-ecommerce-exactonline';
 
     public function bootingPackage()
     {
-        $this->logProviderMemory('bootingPackage:start');
         $this->app->booted(function () {
             $schedule = app(Schedule::class);
             $schedule->command(RefreshExactonlineTokenCommand::class)
@@ -50,12 +48,17 @@ class DashedEcommerceExactonlineServiceProvider extends PackageServiceProvider
         Product::addDynamicRelation('exactonlineProduct', function (Product $model) {
             return $model->hasOne(ExactonlineProduct::class);
         });
-        $this->logProviderMemory('bootingPackage:end');
+        Gate::policy(\Dashed\DashedEcommerceExactonline\Models\ExactonlineProduct::class, \Dashed\DashedEcommerceExactonline\Policies\ExactonlineProductPolicy::class);
+
+        cms()->registerRolePermissions('Integraties', [
+            'view_exactonline_product' => 'Exactonline producten bekijken',
+            'edit_exactonline_product' => 'Exactonline producten bewerken',
+            'delete_exactonline_product' => 'Exactonline producten verwijderen',
+        ]);
     }
 
     public function configurePackage(Package $package): void
     {
-        $this->logProviderMemory('configurePackage:start');
         $this->loadMigrationsFrom(__DIR__ . '/../database/migrations');
 
         cms()->registerSettingsPage(ExactonlineSettingsPage::class, 'Exactonline', 'archive-box', 'Koppel Exactonline');
@@ -86,6 +89,5 @@ class DashedEcommerceExactonlineServiceProvider extends PackageServiceProvider
         cms()->builder('plugins', [
             new DashedEcommerceExactonlinePlugin(),
         ]);
-        $this->logProviderMemory('configurePackage:end');
     }
 }

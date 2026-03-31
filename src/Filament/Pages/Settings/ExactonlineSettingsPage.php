@@ -13,10 +13,13 @@ use Filament\Schemas\Components\Tabs\Tab;
 use Dashed\DashedCore\Models\Customsetting;
 use Filament\Infolists\Components\TextEntry;
 use Filament\Schemas\Components\Utilities\Set;
+use Dashed\DashedCore\Traits\HasSettingsPermission;
 use Dashed\DashedEcommerceExactonline\Classes\Exactonline;
 
 class ExactonlineSettingsPage extends Page
 {
+    use HasSettingsPermission;
+
     protected static bool $shouldRegisterNavigation = false;
     protected static ?string $title = 'Exactonline';
 
