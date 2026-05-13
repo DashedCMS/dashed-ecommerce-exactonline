@@ -157,15 +157,17 @@ MARKDOWN,
 
         cms()->registerSettingsPage(ExactonlineSettingsPage::class, 'Exactonline', 'archive-box', 'Koppel Exactonline');
 
-        cms()->registerIntegration([
-            'slug' => 'exactonline',
-            'label' => 'Exact Online',
-            'icon' => 'heroicon-o-document-text',
-            'category' => 'accounting',
-            'settings_page' => ExactonlineSettingsPage::class,
-            'health_check' => fn (?string $siteId = null) => \Dashed\DashedCore\Integrations\IntegrationHealth::fromSettings(['exactonline_client_id', 'exactonline_client_secret'], $siteId, 'OAuth client-credentials ontbreken'),
-            'package' => 'dashed-ecommerce-exactonline',
-        ]);
+        if (method_exists(cms(), 'registerIntegration')) {
+            cms()->registerIntegration([
+                'slug' => 'exactonline',
+                'label' => 'Exact Online',
+                'icon' => 'heroicon-o-document-text',
+                'category' => 'accounting',
+                'settings_page' => ExactonlineSettingsPage::class,
+                'health_check' => fn (?string $siteId = null) => \Dashed\DashedCore\Integrations\IntegrationHealth::fromSettings(['exactonline_client_id', 'exactonline_client_secret'], $siteId, 'OAuth client-credentials ontbreken'),
+                'package' => 'dashed-ecommerce-exactonline',
+            ]);
+        }
 
         ecommerce()->widgets(
             'orders',
