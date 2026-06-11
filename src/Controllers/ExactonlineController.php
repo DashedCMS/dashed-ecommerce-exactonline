@@ -23,6 +23,12 @@ class ExactonlineController extends Controller
     {
         $site = Sites::get($siteId);
 
+        // Verifieer de OAuth-state tegen de sessie (CSRF-bescherming).
+        $expectedState = session()->pull('exactonline_oauth_state');
+        if (! $expectedState || ! hash_equals($expectedState, (string) $request->state)) {
+            return redirect(ExactonlineSettingsPage::getUrl())->with('error', 'Ongeldige OAuth state.');
+        }
+
         $code = $request->code;
         if ($code) {
             Exactonline::saveAuthentication($code, $site['id']);

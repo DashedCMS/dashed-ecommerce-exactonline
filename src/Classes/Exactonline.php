@@ -3,6 +3,7 @@
 namespace Dashed\DashedEcommerceExactonline\Classes;
 
 use Exception;
+use Illuminate\Support\Str;
 use Dashed\DashedCore\Classes\Mails;
 use Dashed\DashedCore\Classes\Sites;
 use Illuminate\Support\Facades\Http;
@@ -27,7 +28,11 @@ class Exactonline
             $siteId = Sites::getActive();
         }
 
-        return redirect('https://start.exactonline.nl/api/oauth2/auth?client_id=' . Customsetting::get('exactonline_client_id', $siteId) . '&redirect_uri=' . route('dashed.exactonline.save-authentication', $siteId) . '&response_type=code&force_login=0');
+        // CSRF-bescherming: random state meesturen en in de sessie bewaren.
+        $state = Str::random(40);
+        session()->put('exactonline_oauth_state', $state);
+
+        return redirect('https://start.exactonline.nl/api/oauth2/auth?client_id=' . Customsetting::get('exactonline_client_id', $siteId) . '&redirect_uri=' . route('dashed.exactonline.save-authentication', $siteId) . '&response_type=code&force_login=0&state=' . $state);
     }
 
     public static function saveAuthentication($code, $siteId = null)
@@ -262,7 +267,7 @@ class Exactonline
                     'Accept' => "application/json",
                     'Authorization' => 'Bearer ' . Customsetting::get('exactonline_access_token', $siteId) . 's',
                 ])
-                    ->get('https://start.exactonline.nl/api/v1/' . Customsetting::get('exactonline_division', $siteId) . '/logistics/Items?$filter=Code eq \'' . $product->sku . '\'')
+                    ->get('https://start.exactonline.nl/api/v1/' . Customsetting::get('exactonline_division', $siteId) . '/logistics/Items?$filter=Code eq \'' . str_replace("'", "''", (string) $product->sku) . '\'')
                     ->json();
 
                 if (! isset($content['d']['results'][0]['ID'])) {
@@ -393,7 +398,7 @@ class Exactonline
             "Accept" => "application/json",
         ])
             ->withToken(Customsetting::get('exactonline_access_token', $siteId))
-            ->get('https://start.exactonline.nl/api/v1/' . Customsetting::get('exactonline_division', $siteId) . '/crm/Accounts?$select=ID,Accountant,AccountManager,AccountManagerFullName,CreatorFullName,Email,Name&$filter=Name eq \'' . $search . '\'')
+            ->get('https://start.exactonline.nl/api/v1/' . Customsetting::get('exactonline_division', $siteId) . '/crm/Accounts?$select=ID,Accountant,AccountManager,AccountManagerFullName,CreatorFullName,Email,Name&$filter=Name eq \'' . str_replace("'", "''", (string) $search) . '\'')
             ->json()['d']['results'] ?? [];
         //        dump($response->body(), $response->status());
 
@@ -493,7 +498,7 @@ class Exactonline
             "Accept" => "application/json",
         ])
             ->withToken(Customsetting::get('exactonline_access_token', $siteId) . 's')
-            ->get('https://start.exactonline.nl/api/v1/' . Customsetting::get('exactonline_division', $siteId) . '/logistics/Items?$select=ID,Code,Description&$filter=Code eq \'' . $search . '\'')
+            ->get('https://start.exactonline.nl/api/v1/' . Customsetting::get('exactonline_division', $siteId) . '/logistics/Items?$select=ID,Code,Description&$filter=Code eq \'' . str_replace("'", "''", (string) $search) . '\'')
             ->json()['d']['results'] ?? [];
         //        dd($response->json(), $response->status());
 
