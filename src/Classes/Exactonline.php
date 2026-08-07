@@ -79,7 +79,7 @@ class Exactonline
             Mails::sendNotificationToAdmins('Exact is succesvol gekoppeld aan het CMS');
 
             Notification::make()
-                ->title('Exact is succesvol gekoppeld aan het CMS')
+                ->title(__('Exact is succesvol gekoppeld aan het CMS'))
                 ->success()
                 ->send();
         } catch (Exception $e) {
@@ -89,7 +89,7 @@ class Exactonline
             Customsetting::set('exactonline_refresh_token', null, $siteId);
 
             Notification::make()
-                ->title('Exact kon niet gekoppeld worden aan het CMS')
+                ->title(__('Exact kon niet gekoppeld worden aan het CMS'))
                 ->danger()
                 ->send();
 

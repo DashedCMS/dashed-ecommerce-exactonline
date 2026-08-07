@@ -60,7 +60,7 @@ class ExactonlineSettingsPage extends Page
                     ->state(fn () => ! Customsetting::get('exactonline_connected', $site['id'], 0) ? 'Activeer Exactonline' : '')
                     ->hintActions([
                         \Filament\Actions\Action::make('connectExactonline')
-                            ->label('Connect Exactonline')
+                            ->label(__('Connect Exactonline'))
                             ->button()
                             ->url(route('dashed.exactonline.authenticate', [$site['id']]))
                             ->openUrlInNewTab()
@@ -77,26 +77,26 @@ class ExactonlineSettingsPage extends Page
                         'lg' => 2,
                     ]),
                 TextInput::make("exactonline_client_id_{$site['id']}")
-                    ->label('Exactonline client ID')
+                    ->label(__('Exactonline client ID'))
                     ->maxLength(255),
                 TextInput::make("exactonline_client_secret_{$site['id']}")
-                    ->label('Exactonline client secret')
+                    ->label(__('Exactonline client secret'))
                     ->maxLength(255),
                 TextInput::make("exactonline_division_{$site['id']}")
-                    ->label('Exactonline division')
+                    ->label(__('Exactonline division'))
                     ->maxLength(255),
                 Select::make("exactonline_vat_codes_gl_to_pay_{$site['id']}")
-                    ->label('Exactonline VAT rate GL rekening ID (to pay)')
+                    ->label(__('Exactonline VAT rate GL rekening ID (to pay)'))
 //                    ->required()
                     ->options(collect($GLAccounts)->pluck('Description', 'ID'))
                     ->visible(Customsetting::get('exactonline_connected', $site['id'], 0) ? true : false),
                 Select::make("exactonline_vat_codes_gl_to_claim_{$site['id']}")
-                    ->label('Exactonline VAT rate GL rekening ID (to claim)')
+                    ->label(__('Exactonline VAT rate GL rekening ID (to claim)'))
 //                    ->required()
                     ->options(collect($GLAccounts)->pluck('Description', 'ID'))
                     ->visible(Customsetting::get('exactonline_connected', $site['id'], 0) ? true : false),
                 TextInput::make("exactonline_payment_costs_search_product_id_{$site['id']}")
-                    ->label('Zoek product voor betalingskosten')
+                    ->label(__('Zoek product voor betalingskosten'))
                     ->reactive()
                     ->afterStateUpdated(function ($state, Set $set) use ($site) {
                         $response = Exactonline::getItems($site['id'], $state);
@@ -104,15 +104,15 @@ class ExactonlineSettingsPage extends Page
                             $set('exactonline_payment_costs_product_id_' . $site['id'], $response[0]['ID']);
                         }
                     })
-                    ->helperText('Indien er een product gevonden is wordt het volgende veld automatisch ingevuld, hier moet je zoeken op code')
+                    ->helperText(__('Indien er een product gevonden is wordt het volgende veld automatisch ingevuld, hier moet je zoeken op code'))
                     ->visible(fn () => (Customsetting::get('exactonline_connected', $site['id'], 0) ? true : false)),
                 TextInput::make("exactonline_payment_costs_product_id_{$site['id']}")
-                    ->label('Exactonline product om betalingskosten op te boeken')
+                    ->label(__('Exactonline product om betalingskosten op te boeken'))
 //                    ->required()
                     ->reactive()
                     ->visible(fn () => (Customsetting::get('exactonline_connected', $site['id'], 0) ? true : false)),
                 TextInput::make("exactonline_shipping_costs_search_product_id_{$site['id']}")
-                    ->label('Zoek product voor verzendkosten')
+                    ->label(__('Zoek product voor verzendkosten'))
                     ->reactive()
                     ->afterStateUpdated(function ($state, Set $set) use ($site) {
                         $response = Exactonline::getItems($site['id'], $state);
@@ -120,15 +120,15 @@ class ExactonlineSettingsPage extends Page
                             $set('exactonline_shipping_costs_product_id_' . $site['id'], $response[0]['ID']);
                         }
                     })
-                    ->helperText('Indien er een product gevonden is wordt het volgende veld automatisch ingevuld, hier moet je zoeken op code')
+                    ->helperText(__('Indien er een product gevonden is wordt het volgende veld automatisch ingevuld, hier moet je zoeken op code'))
                     ->visible(fn () => (Customsetting::get('exactonline_connected', $site['id'], 0) ? true : false)),
                 TextInput::make("exactonline_shipping_costs_product_id_{$site['id']}")
-                    ->label('Exactonline product om verzendkosten op te boeken')
+                    ->label(__('Exactonline product om verzendkosten op te boeken'))
 //                    ->required()
                     ->reactive()
                     ->visible(fn () => (Customsetting::get('exactonline_connected', $site['id'], 0) ? true : false)),
                 TextInput::make("exactonline_search_customer_id_{$site['id']}")
-                    ->label('Zoek klant voor alle bestellingen')
+                    ->label(__('Zoek klant voor alle bestellingen'))
                     ->reactive()
                     ->afterStateUpdated(function ($state, Set $set) use ($site) {
                         $response = Exactonline::getCustomers($site['id'], $state);
@@ -136,10 +136,10 @@ class ExactonlineSettingsPage extends Page
                             $set('exactonline_customer_id_' . $site['id'], $response[0]['ID']);
                         }
                     })
-                    ->helperText('Indien er een klant gevonden is wordt het volgende veld automatisch ingevuld, hier moet je zoeken op naam')
+                    ->helperText(__('Indien er een klant gevonden is wordt het volgende veld automatisch ingevuld, hier moet je zoeken op naam'))
                     ->visible(fn () => (Customsetting::get('exactonline_connected', $site['id'], 0) ? true : false)),
                 TextInput::make("exactonline_customer_id_{$site['id']}")
-                    ->label('Exactonline customer ID (alle bestellingen worden op deze klant geboekt)')
+                    ->label(__('Exactonline customer ID (alle bestellingen worden op deze klant geboekt)'))
 //                    ->required()
                     ->reactive()
                     ->visible(fn () => (Customsetting::get('exactonline_connected', $site['id'], 0) ? true : false)),
@@ -180,7 +180,7 @@ class ExactonlineSettingsPage extends Page
         }
 
         Notification::make()
-            ->title('De Exactonline instellingen zijn opgeslagen')
+            ->title(__('De Exactonline instellingen zijn opgeslagen'))
             ->success()
             ->send();
 

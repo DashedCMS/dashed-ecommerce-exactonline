@@ -34,16 +34,16 @@ class ExactonlineProductResource extends Resource
         return $table
             ->columns([
                 TextColumn::make('product.name')
-                    ->label('Naam')
+                    ->label(__('Naam'))
                     ->searchable()
                     ->sortable(),
                 IconColumn::make('is_synced')
-                    ->label('Is gesynchroniseerd')
+                    ->label(__('Is gesynchroniseerd'))
                     ->getStateUsing(fn ($record) => $record->exactonline_id ? true : false)
                     ->trueIcon('heroicon-o-check-circle')
                     ->falseIcon('heroicon-o-x-circle'),
                 TextColumn::make('error')
-                    ->label('Foutmelding')
+                    ->label(__('Foutmelding'))
                     ->sortable()
                     ->searchable()
                     ->getStateUsing(fn ($record) => ! $record->exactonline_id ? $record->error : ''),
