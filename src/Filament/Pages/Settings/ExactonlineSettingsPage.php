@@ -18,6 +18,7 @@ use Dashed\DashedEcommerceExactonline\Classes\Exactonline;
 
 class ExactonlineSettingsPage extends Page
 {
+    use \Dashed\DashedCore\Filament\Concerns\TranslatesPageLabels;
     use HasSettingsPermission;
 
     protected static bool $shouldRegisterNavigation = false;

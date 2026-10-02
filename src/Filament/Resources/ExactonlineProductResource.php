@@ -15,6 +15,8 @@ use Dashed\DashedEcommerceExactonline\Filament\Resources\ExactonlineProductResou
 
 class ExactonlineProductResource extends Resource
 {
+    use \Dashed\DashedCore\Filament\Concerns\TranslatesResourceLabels;
+
     protected static ?string $model = ExactonlineProduct::class;
 
     protected static string | BackedEnum | null $navigationIcon = 'heroicon-o-shopping-bag';
