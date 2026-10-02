@@ -1,1 +1,26 @@
-{}
+{
+    "Connect Exactonline": "Connect Exactonline",
+    "De Exactonline instellingen zijn opgeslagen": "The Exactonline settings have been saved",
+    "Exact is succesvol gekoppeld aan het CMS": "Exact has been successfully connected to the CMS",
+    "Exact kon niet gekoppeld worden aan het CMS": "Exact could not be connected to the CMS",
+    "Exactonline": "Exactonline",
+    "Exactonline client ID": "Exactonline client ID",
+    "Exactonline client secret": "Exactonline client secret",
+    "Exactonline customer ID (alle bestellingen worden op deze klant geboekt)": "Exactonline customer ID (all orders are booked on this customer)",
+    "Exactonline division": "Exactonline division",
+    "Exactonline product": "Exactonline product",
+    "Exactonline producten": "Exactonline products",
+    "Exactonline product om betalingskosten op te boeken": "Exactonline product to book payment costs on",
+    "Exactonline product om verzendkosten op te boeken": "Exactonline product to book shipping costs on",
+    "Exactonline VAT rate GL rekening ID (to claim)": "Exactonline VAT rate GL account ID (to claim)",
+    "Exactonline VAT rate GL rekening ID (to pay)": "Exactonline VAT rate GL account ID (to pay)",
+    "Foutmelding": "Error message",
+    "Indien er een klant gevonden is wordt het volgende veld automatisch ingevuld, hier moet je zoeken op naam": "If a customer is found, the next field is filled in automatically; search by name here",
+    "Indien er een product gevonden is wordt het volgende veld automatisch ingevuld, hier moet je zoeken op code": "If a product is found, the next field is filled in automatically; search by code here",
+    "Is gesynchroniseerd": "Is synced",
+    "Koppel Exactonline": "Connect Exactonline",
+    "Naam": "Name",
+    "Zoek klant voor alle bestellingen": "Search customer for all orders",
+    "Zoek product voor betalingskosten": "Search product for payment costs",
+    "Zoek product voor verzendkosten": "Search product for shipping costs"
+}
