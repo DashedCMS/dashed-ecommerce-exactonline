@@ -181,6 +181,7 @@ MARKDOWN,
 
         $package
             ->name('dashed-ecommerce-exactonline')
+            ->hasTranslations()
             ->hasViews()
             ->hasRoutes([
                 'exactonlineRoutes',
