@@ -74,6 +74,7 @@ class Exactonline
 
             Customsetting::set('exactonline_access_token', $response['access_token'], $siteId);
             Customsetting::set('exactonline_refresh_token', $response['refresh_token'], $siteId);
+            Customsetting::set('exactonline_refresh_token_at', now()->toIso8601String(), $siteId);
             Customsetting::set('exactonline_connected', true, $siteId);
             Customsetting::set('exactonline_notified_of_logout', false, $siteId);
             Mails::sendNotificationToAdmins('Exact is succesvol gekoppeld aan het CMS');
@@ -104,6 +105,35 @@ class Exactonline
         }
 
         return redirect()->route('filament.dashed.pages.dashboard');
+    }
+
+    /** Een refresh-token van Exact verloopt na dertig dagen zonder gebruik. */
+    public const REFRESH_TOKEN_LIFETIME_DAYS = 30;
+
+    /**
+     * Gezondheid voor het scherm Koppelingen: instellingen, of Exact nog
+     * gekoppeld is, en wanneer het refresh-token verloopt als het niet meer
+     * ververst wordt.
+     */
+    public static function healthCheck(?string $siteId = null): \Dashed\DashedCore\Integrations\IntegrationHealth
+    {
+        $health = \Dashed\DashedCore\Integrations\IntegrationHealth::fromSettings(['exactonline_client_id', 'exactonline_client_secret'], $siteId, 'OAuth client-credentials ontbreken');
+
+        if ($health->status !== \Dashed\DashedCore\Enums\IntegrationStatus::Connected) {
+            return $health;
+        }
+
+        if (! Customsetting::get('exactonline_connected', $siteId) || ! Customsetting::get('exactonline_refresh_token', $siteId)) {
+            return \Dashed\DashedCore\Integrations\IntegrationHealth::failing('Exact is uitgelogd en moet opnieuw worden gekoppeld');
+        }
+
+        $refreshedAt = Customsetting::get('exactonline_refresh_token_at', $siteId);
+
+        if (! $refreshedAt || ! method_exists($health, 'withExpiry')) {
+            return $health;
+        }
+
+        return $health->withExpiry(\Illuminate\Support\Carbon::parse($refreshedAt)->addDays(self::REFRESH_TOKEN_LIFETIME_DAYS));
     }
 
     public static function refreshToken($siteId = null)
@@ -153,6 +183,9 @@ class Exactonline
             Customsetting::set('exactonline_connected', false, $siteId);
             Customsetting::set('exactonline_access_token', null, $siteId);
             Customsetting::set('exactonline_refresh_token', null, $siteId);
+            if (class_exists(\Dashed\DashedCore\Integrations\IntegrationEvents::class)) {
+                \Dashed\DashedCore\Integrations\IntegrationEvents::failed('exactonline', 'Token verversen mislukt: '.($response['error_description'] ?? $response['error'] ?? 'onbekende fout'), $siteId);
+            }
             if (! Customsetting::get('exactonline_notified_of_logout', $siteId, false)) {
                 Mails::sendNotificationToAdmins('Exact is uitgelogd en moet opnieuw worden gekoppeld in Dashed');
                 Customsetting::set('exactonline_notified_of_logout', true, $siteId);
@@ -160,6 +193,7 @@ class Exactonline
         } else {
             Customsetting::set('exactonline_access_token', $response['access_token'], $siteId);
             Customsetting::set('exactonline_refresh_token', $response['refresh_token'], $siteId);
+            Customsetting::set('exactonline_refresh_token_at', now()->toIso8601String(), $siteId);
             Customsetting::set('exactonline_connected', true, $siteId);
             Customsetting::set('exactonline_notified_of_logout', false, $siteId);
         }

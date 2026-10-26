@@ -164,7 +164,7 @@ MARKDOWN,
                 'icon' => 'heroicon-o-document-text',
                 'category' => 'accounting',
                 'settings_page' => ExactonlineSettingsPage::class,
-                'health_check' => fn (?string $siteId = null) => \Dashed\DashedCore\Integrations\IntegrationHealth::fromSettings(['exactonline_client_id', 'exactonline_client_secret'], $siteId, 'OAuth client-credentials ontbreken'),
+                'health_check' => [\Dashed\DashedEcommerceExactonline\Classes\Exactonline::class, 'healthCheck'],
                 'package' => 'dashed-ecommerce-exactonline',
             ]);
         }
