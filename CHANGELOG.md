@@ -2,6 +2,11 @@
 
 All notable changes to `dashed-ecommerce-exactonline` will be documented in this file.
 
+## v4.4.2 - 2026-11-06
+
+### Fixed
+- Mislukte bestellingen maximaal eens per uur opnieuw, en ze houden nieuwe bestellingen niet meer tegen. Een verwijderde bestelling breekt de push niet af.
+
 ## v4.4.1 - 2026-11-06
 
 ### Changed
