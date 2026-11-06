@@ -28,14 +28,17 @@ class DashedEcommerceExactonlineServiceProvider extends PackageServiceProvider
             $schedule = app(Schedule::class);
             $schedule->command(RefreshExactonlineTokenCommand::class)
                 ->everyMinute()
+                ->when(fn () => \Dashed\DashedEcommerceExactonline\Classes\Exactonline::tokenNeedsRefresh())
                 ->withoutOverlapping();
             $schedule->command(PushProductsToExactonlineCommand::class)
                 ->everyFifteenMinutes()
+                ->when(fn () => \Dashed\DashedEcommerceExactonline\Classes\Exactonline::hasConnection())
                 ->withoutOverlapping();
             //Only for vat rate atm, but not used
             //                    $schedule->command(SyncProductsWithExactonlineCommand::class)->everyFifteenMinutes();
             $schedule->command(PushOrdersToExactonlineCommand::class)
                 ->everyMinute()
+                ->when(fn () => \Dashed\DashedEcommerceExactonline\Classes\Exactonline::hasOrdersToPush())
                 ->withoutOverlapping();
         });
 

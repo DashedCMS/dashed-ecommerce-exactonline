@@ -13,6 +13,43 @@ use Dashed\DashedEcommerceCore\Models\Product;
 
 class Exactonline
 {
+    /**
+     * Een token leeft tien minuten en Exact weigert verversen tot vlak voor het
+     * einde. Negen minuten laat hooguit een poging extra mislukken, en ververst
+     * voordat een push op een verlopen token loopt.
+     */
+    public const TOKEN_REFRESH_AFTER_SECONDS = 540;
+
+    public static function tokenNeedsRefresh(?string $siteId = null): bool
+    {
+        return rescue(function () use ($siteId) {
+            $siteId ??= Sites::getActive();
+
+            if (! self::isConnected($siteId)) {
+                return false;
+            }
+
+            $refreshedAt = Customsetting::get('exactonline_refresh_token_at', $siteId);
+
+            return ! $refreshedAt
+                || \Illuminate\Support\Carbon::parse($refreshedAt)->addSeconds(self::TOKEN_REFRESH_AFTER_SECONDS)->isPast();
+        }, true, false);
+    }
+
+    public static function hasConnection(): bool
+    {
+        return rescue(fn () => (bool) self::isConnected(), true, false);
+    }
+
+    public static function hasOrdersToPush(): bool
+    {
+        return rescue(
+            fn () => self::isConnected() && \Dashed\DashedEcommerceExactonline\Models\ExactonlineOrder::where('pushed', '!=', 1)->exists(),
+            true,
+            false,
+        );
+    }
+
     public static function isConnected($siteId = null)
     {
         if (! $siteId) {
